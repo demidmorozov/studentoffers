@@ -1,9 +1,10 @@
 ---
-import { bankCards } from '../data/banking';
+import { offers } from '../data/offers';
 import { offerPath } from '../data/types';
 import Status from './Status.astro';
+const bankCards = offers.filter(offer => offer.kind === 'card');
 ---
 <div class="table-scroll" role="region" aria-label="Student bank card comparison; scroll horizontally for all columns" tabindex="0">
-  <table class="comparison-table"><caption>Documented card terms · research dated 26 October 2026 · current terms require verification</caption><thead><tr><th scope="col">Bank & card</th><th scope="col">Issuance</th><th scope="col">Annual servicing</th><th scope="col">Cashback</th><th scope="col">Balance interest</th><th scope="col">Currencies</th><th scope="col">Age / student proof</th><th scope="col">Status</th></tr></thead><tbody>{bankCards.map(offer => <tr><th scope="row"><a href={offerPath(offer)}>{offer.provider}<span>{offer.name}</span></a></th><td>{offer.comparison?.issuance}</td><td>{offer.comparison?.annual}</td><td>{offer.comparison?.cashback}</td><td>{offer.comparison?.interest}</td><td>{offer.comparison?.currencies}</td><td>{offer.comparison?.age}<br />{offer.comparison?.studentId}</td><td><Status status={offer.status} /></td></tr>)}</tbody></table>
+  <table class="comparison-table"><caption>Published card terms · see each offer for source-check dates and eligibility</caption><thead><tr><th scope="col">Bank & card</th><th scope="col">Issuance</th><th scope="col">Annual servicing</th><th scope="col">Cashback</th><th scope="col">Balance interest</th><th scope="col">Currencies</th><th scope="col">Age / student proof</th><th scope="col">Status</th></tr></thead><tbody>{bankCards.map(offer => <tr><th scope="row"><a href={offerPath(offer)}>{offer.provider}<span>{offer.name}</span></a></th><td>{offer.comparison?.issuance}</td><td>{offer.comparison?.annual}</td><td>{offer.comparison?.cashback}</td><td>{offer.comparison?.interest}</td><td>{offer.comparison?.currencies}</td><td>{offer.comparison?.age}<br />{offer.comparison?.studentId}</td><td><Status status={offer.status} /></td></tr>)}</tbody></table>
 </div>
 <p class="small-note">Free servicing does not make every transaction free. Transfers, withdrawals, SMS, and other services may carry separate fees. “Free Cards” filters for documented free issuance and servicing together, subject to the stated offer conditions.</p>

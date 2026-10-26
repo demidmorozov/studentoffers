@@ -7,10 +7,10 @@ import Footer from '../components/Footer.astro';
 interface Props { title?: string; description?: string; noindex?: boolean; }
 const {
   title,
-  description = 'Explore documented student discounts, banking benefits, mobile plans, transport concessions, and opportunities in Armenia.',
+  description = 'Discover local and international offers available to students studying in Armenia.',
   noindex = false,
 } = Astro.props;
-const pageTitle = title ? `${title} — StudentOffers` : 'StudentOffers — Student opportunities in Armenia';
+const pageTitle = title ? `${title} — StudentOffers` : 'StudentOffers — Student discounts in Armenia';
 const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : undefined;
 const image = Astro.site ? new URL('/social.png', Astro.site).href : undefined;
 ---
@@ -31,7 +31,7 @@ const image = Astro.site ? new URL('/social.png', Astro.site).href : undefined;
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={description} />
     {canonical && <meta property="og:url" content={canonical} />}
-    {image && <><meta property="og:image" content={image} /><meta property="og:image:type" content="image/png" /><meta property="og:image:width" content="1200" /><meta property="og:image:height" content="630" /><meta property="og:image:alt" content="StudentOffers — Student opportunities in Armenia." /><meta name="twitter:image" content={image} /></>}
+    {image && <><meta property="og:image" content={image} /><meta property="og:image:type" content="image/png" /><meta property="og:image:width" content="1200" /><meta property="og:image:height" content="630" /><meta property="og:image:alt" content="StudentOffers — Student discounts in Armenia" /><meta name="twitter:image" content={image} /></>}
     <meta name="twitter:card" content="summary_large_image" />
     {noindex && <meta name="robots" content="noindex, follow" />}
     <style is:global>

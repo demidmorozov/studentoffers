@@ -1,4 +1,4 @@
-import type { Offer } from './types';
+import type { ResearchOffer as Offer } from './types';
 
 const unknown = 'Not documented; confirm with the bank.';
 const base = {

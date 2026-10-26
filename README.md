@@ -23,10 +23,10 @@ npm run preview
 ## What is implemented
 
 - Responsive monochrome directory, semantic navigation, native mobile menu, breadcrumbs, and a custom 404.
-- All 22 requested subcategories across Student Discounts, Careers, Education, and Opportunities.
-- 18 researched detail pages: 9 bank card products (including archived VTB iStudent), 5 documented education financing references, 3 Ucom plans, and 1 Yerevan transport pass program.
-- Live search across providers, offer names, categories, and documented benefits. Multiple benefit filters combine; offer type and status selectors appear where supported. Search state is shareable in the URL, with result counts, reset controls, and empty states.
-- Banking comparison of all 9 card products; transport fare comparison and claim instructions.
+- One unified directory with nine categories for local and international offers available to students studying in Armenia. Transport & Travel includes accommodation. Replaced geographic URLs have Cloudflare Pages redirects.
+- Publication is gated on official-source verification. Current published offers, unpublished research and reasons are documented in `docs/unified-directory-review.md`; the requested consolidated research file is still pending.
+- Live search across providers, offer names, categories, benefits and eligibility. Optional bank-card selection persists across categories, includes offers requiring no specific card, supports a strict toggle, and has active-state/result counts and reset controls. Other eligibility requirements remain visible.
+- Banking comparison uses published card products only. Distinct cashback benefits reference parent cards; multi-category offers retain one record and one canonical detail page.
 - Honest empty states in categories without supplied research. No fictional jobs, scholarships, contact details, or testimonials.
 - About, research policy, submission guidelines, and contact pages. Submissions and project questions use the existing GitHub issue tracker; the site does not collect personal information.
 - Descriptive metadata, configurable canonical and Open Graph URLs, sitemap, robots.txt, and Cloudflare security/cache headers.
@@ -105,7 +105,7 @@ npm audit             # Published dependency advisories
 
 The browser suite starts and stops its own local production preview. Screenshots and failure traces go into ignored `test-results/`; external results go into ignored `external-link-report.json`. Reachability checks report failures for manual follow-up; HTTP success alone does not confirm an offer's terms. On restrictive hosts, Astro may need permission to initialize its local configuration directory and Playwright needs permission to launch a browser and bind a local port. `ASTRO_TELEMETRY_DISABLED=1` can disable Astro's optional telemetry.
 
-Validation performed on 26 October 2026 with Astro 7.4.2: successful Astro/TypeScript checks with no errors or warnings; static production build; all 51 HTML pages and 1,638 internal links, assets, and anchors checked; all 16 browser tests passed, including interaction, responsive layout, no-JavaScript behavior, the Cloudflare content security policy, and automated WCAG AA checks. Desktop/mobile screenshots were inspected. The complete dependency audit reported zero vulnerabilities. Domain-configured sitemap and canonical generation were also checked using a reserved test origin. See `docs/research-audit.md` for content and external-check limitations. A fresh checkout needs Chromium installed before browser tests run.
+Current unified-directory validation: Astro/TypeScript checks pass with no errors or warnings; production build generates 28 HTML pages; all 588 internal links/assets/anchors pass; all 29 data/browser tests pass, including draft gates, linked benefits, multi-category identity, remembered bank-card filters, eight viewport widths, no-JavaScript rendering, content security policy and desktop/mobile WCAG AA checks. See `docs/unified-directory-review.md` for the verified publication inventory, unpublished entries and the missing research input.
 
 ## Research limitations
 

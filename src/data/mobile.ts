@@ -1,4 +1,4 @@
-import type { Offer } from './types';
+import type { ResearchOffer as Offer } from './types';
 const plans = [
   { slug: 'ucom-level-up-2500', name: 'Level Up+ 2500', price: '2,500', data: '40', standard: '20', minutes: '1,000', sms: '500', type: 'Prepaid' },
   { slug: 'ucom-level-up-3000', name: 'Level Up+ 3000', price: '3,000', data: '120', standard: '40', minutes: '1,500', sms: '300', type: 'Postpaid' },

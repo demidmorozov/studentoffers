@@ -1,7 +1,7 @@
 ---
 interface Props { tags: string[]; statuses: string[]; kinds: string[]; }
 const { tags, statuses, kinds } = Astro.props;
-const kindLabels: Record<string, string> = { card: 'Bank cards', loan: 'Education financing', mobile: 'Mobile plans', transport: 'Transport passes' };
+const kindLabels: Record<string, string> = { card: 'Bank cards', loan: 'Education financing', mobile: 'Mobile plans', transport: 'Transport passes', benefit: 'Card benefits', subscription: 'Student subscriptions', discount: 'Student discounts' };
 ---
 <div class="filter-row">
   {tags.length > 0 && <fieldset class="filter-chips"><legend class="sr-only">Filter by benefit or plan type; selected filters combine</legend>{tags.map(tag => <label class="filter-chip"><input type="checkbox" value={tag} data-filter /><span>{tag}</span></label>)}</fieldset>}

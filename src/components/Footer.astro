@@ -1,12 +1,7 @@
----
-import { groups } from '../data/categories';
-import Icon from './Icon.astro';
----
 <footer class="site-footer">
-  <div class="container footer-main">
-    <div class="footer-intro"><a class="brand" href="/">StudentOffers<span class="brand-country">AM</span></a><p>A clearer view of student life.<br />Made for students in Armenia.</p></div>
-    <div><span class="eyebrow">Explore</span>{groups.map(group => <a href={`/${group.slug}/`}>{group.title}</a>)}</div>
-    <div><span class="eyebrow">StudentOffers</span><a href="/about/">Our mission</a><a href="/about/submit/">Submit an opportunity <Icon name="arrow" size={13} /></a><a href="/about/contact/">Contact us</a><a href="/about/research/">Research & accuracy</a></div>
+  <div class="container footer-inner">
+    <a class="brand" href="/">Studentoffers.am</a>
+    <span>© 2026 StudentOffers</span>
+    <span>Independent information. Always check with the provider.</span>
   </div>
-  <div class="container footer-bottom"><span>© {new Date().getFullYear()} StudentOffers</span><span>Independent information. Always check with the provider.</span><a href="#top">Back to top ↑</a></div>
 </footer>

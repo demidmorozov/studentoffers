@@ -2,19 +2,32 @@
 import type { Offer } from '../data/types';
 import { offerPath } from '../data/types';
 import { categories } from '../data/categories';
+import { offers } from '../data/offers';
+import { requiredCardId, resolvedRequirements } from '../lib/offer-data';
 import Icon from './Icon.astro';
-import Status from './Status.astro';
 interface Props { offer: Offer; searchable?: boolean; }
 const { offer, searchable = false } = Astro.props;
 const category = categories.find(c => c.slug === offer.category);
+const requirements = resolvedRequirements(offer, offers);
+const requiredCard = offers.find(card => card.id === requirements.bankCardId);
+const labels = { cashback: 'Cashback', discount: 'Discount', 'free-product': 'Free product', 'paid-plan': 'Paid student plan', 'bank-card': 'Bank card', financing: 'Repayable financing' };
 const documentedFacts = offer.facts.filter(([, value]) => !/not documented|not specified|confirm with/i.test(value)).flat();
-const search = [offer.provider, offer.name, category?.title, offer.benefit, offer.benefitLabel, offer.summary, ...offer.highlights, ...offer.tags, ...documentedFacts].join(' ');
+const search = [offer.provider, offer.name, ...categories.filter(c => offer.categories.includes(c.slug as Offer['category'])).map(c => c.title), labels[offer.benefitType], offer.benefit, offer.benefitLabel, offer.summary, ...offer.highlights, ...offer.tags, ...documentedFacts, ...requirements.eligibility, ...requirements.verification, requirements.membership, requirements.university, requiredCard?.provider, requiredCard?.name].filter(Boolean).join(' ');
 ---
-<article class="offer-card" data-offer={searchable ? '' : undefined} data-search={searchable ? search : undefined} data-tags={searchable ? JSON.stringify(offer.tags) : undefined} data-status={searchable ? offer.status : undefined} data-kind={searchable ? offer.kind : undefined}>
+<article class="offer-card" data-offer={searchable ? offer.id : undefined} data-required-card={searchable ? requiredCardId(offer, offers) ?? '' : undefined} data-search={searchable ? search : undefined} data-tags={searchable ? JSON.stringify(offer.tags) : undefined} data-status={searchable ? offer.status : undefined} data-kind={searchable ? offer.kind : undefined}>
   <div class="offer-top"><span class="provider">{offer.provider}</span><Icon name={category?.icon ?? 'wallet'} size={19} /></div>
   <h3><a href={offerPath(offer)}>{offer.name}</a></h3>
+  <p class="offer-type">{labels[offer.benefitType]}</p>
   <div class:list={['offer-benefit', { 'benefit-long': offer.benefit.length > 13 }]}>{offer.benefit}</div>
   <p class="benefit-label">{offer.benefitLabel}</p>
   <ul class="offer-highlights">{offer.highlights.map(highlight => <li>{highlight}</li>)}</ul>
-  <div class="offer-bottom"><Status status={offer.status} /><a href={offerPath(offer)} aria-label={`View details for ${offer.provider} ${offer.name}`}>View details <Icon name="arrow" size={15} /></a></div>
+  <div class="offer-requirements">
+    {requiredCard && <p>Requires {requiredCard.provider} {requiredCard.name}</p>}
+    {requirements.membership && <p>Requires {requirements.membership}</p>}
+    {requirements.university && <p>{requirements.university} required</p>}
+    {!requiredCard && <p>No specific bank card required</p>}
+    {requirements.eligibility.map(item => <p>{item}</p>)}
+    {requirements.verification.map(item => <p>{item}</p>)}
+  </div>
+  <div class="offer-bottom"><span class="status">Source checked {offer.sourceVerification.lastChecked}</span><a href={offerPath(offer)} aria-label={`View details for ${offer.provider} ${offer.name}`}>View details <Icon name="arrow" size={15} /></a></div>
 </article>

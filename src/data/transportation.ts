@@ -1,4 +1,4 @@
-import type { Offer } from './types';
+import type { ResearchOffer as Offer } from './types';
 export const transportationOffers: Offer[] = [{
   slug: 'yerevan-student-transport', category: 'transportation', kind: 'transport', provider: 'Yerevan Municipality / Telcell', name: 'Yerevan Student Transport Pass',
   benefit: '15% off', benefitLabel: 'eligible student transport passes',

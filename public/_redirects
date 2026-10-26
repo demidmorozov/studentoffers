@@ -1,0 +1,6 @@
+/global-discounts /discounts/ 301
+/global-discounts/ /discounts/ 301
+/discounts/transportation /discounts/transport-travel/ 301
+/discounts/transportation/ /discounts/transport-travel/ 301
+/discounts/transportation/yerevan-student-transport /discounts/transport-travel/ 301
+/discounts/transportation/yerevan-student-transport/ /discounts/transport-travel/ 301

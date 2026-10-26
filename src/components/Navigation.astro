@@ -6,5 +6,6 @@ const path = Astro.url.pathname;
 ---
 <nav aria-label={mobile ? 'Mobile navigation' : 'Main navigation'} class:list={['nav-links', { 'mobile-links': mobile }]}>
   {groups.map(group => <a href={`/${group.slug}/`} class:list={{ current: path.startsWith(`/${group.slug}/`) }} aria-current={path === `/${group.slug}/` ? 'page' : undefined}>{group.title}</a>)}
-  <a href="/about/" class:list={{ current: path.startsWith('/about/') }} aria-current={path === '/about/' ? 'page' : undefined}>About</a>
+  <a href="/about/" class:list={{ current: path.startsWith('/about/') && path !== '/about/contact/' }} aria-current={path === '/about/' ? 'page' : undefined}>About</a>
+  <a href="/about/contact/" class:list={{ current: path === '/about/contact/' }} aria-current={path === '/about/contact/' ? 'page' : undefined}>Contact</a>
 </nav>

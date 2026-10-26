@@ -4,9 +4,13 @@ import Icon from './Icon.astro';
 ---
 <header class="site-header">
   <div class="container header-inner">
-    <a class="brand" href="/" aria-label="StudentOffers home"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>StudentOffers<span class="brand-country">AM</span></a>
+    <a class="brand" href="/" aria-label="Studentoffers.am home">Studentoffers.am</a>
     <div class="desktop-nav"><Navigation /></div>
-    <a href="/search/" class="header-search" aria-label="Search all offers"><Icon name="search" size={19} /></a>
+    <form action="/search/" class="header-search" role="search" aria-label="Site search">
+      <label for="header-query" class="sr-only">Search all offers</label>
+      <input id="header-query" type="search" name="q" placeholder="Search offers…" />
+      <button type="submit" aria-label="Search all offers"><Icon name="search" size={18} /></button>
+    </form>
     <details class="mobile-nav">
       <summary aria-label="Open navigation"><Icon name="menu" /><span>Menu</span></summary>
       <Navigation mobile />

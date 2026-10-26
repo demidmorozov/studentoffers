@@ -4,15 +4,32 @@ import OfferCard from './OfferCard.astro';
 import Search from './Search.astro';
 import Filters from './Filters.astro';
 import Icon from './Icon.astro';
-interface Props { offers: Offer[]; }
-const { offers } = Astro.props;
+import { offers as published } from '../data/offers';
+import { cardFilterId } from '../lib/offer-data';
+import { categories, categoryPath } from '../data/categories';
+interface Props { offers: Offer[]; category?: string; }
+const { offers, category } = Astro.props;
+const hasBankOffers = offers.some(offer => cardFilterId(offer, published));
+const bankCards = published.filter(offer => offer.kind === 'card');
 const tags = [...new Set(offers.flatMap(o => o.tags))];
 const statuses = [...new Set(offers.map(o => o.status))];
 const kinds = [...new Set(offers.map(o => o.kind))];
 ---
 <section data-offer-browser class="offer-browser" aria-label="Offer directory">
-  <div class="search-panel" data-search-panel hidden><Search directory /><Filters tags={tags} statuses={statuses} kinds={kinds} /></div>
-  <noscript><p class="notice">All researched offers are displayed below. Enable JavaScript to use live search and filters.</p></noscript>
+  <nav class="category-links" aria-label="Discount categories">
+    {categories.map(item => <a href={categoryPath(item)} aria-current={item.slug === category ? 'page' : undefined}>{item.title}</a>)}
+  </nav>
+  <div class="search-panel" data-search-panel hidden>
+    {hasBankOffers && <div class="bank-card-filter">
+      <label class="select-label bank-card-select" for="bank-card"><span>Bank card</span><select id="bank-card" data-bank-card><option value="">All offers</option><option value="none">No specific bank card required</option>{bankCards.map(card => <option value={card.id}>{card.provider} {card.name}</option>)}</select></label>
+      <label class="card-only" data-card-only-control hidden><input type="checkbox" data-card-only />Only offers for this card</label>
+      <button class="text-link" type="button" data-card-reset hidden>Reset bank card</button>
+      <p class="card-filter-note">Choose a card product only. Other eligibility and verification requirements still apply.</p>
+      <p class="active-card" data-active-card role="status" aria-live="polite"></p>
+    </div>}
+    <Search directory /><Filters tags={tags} statuses={statuses} kinds={kinds} />
+  </div>
+  <noscript><p class="notice">All published offers are displayed below. Enable JavaScript to use search and filters.</p></noscript>
   <div class="results-toolbar"><p data-count role="status" aria-live="polite" aria-atomic="true">{offers.length} {offers.length === 1 ? 'offer' : 'offers'}</p><button type="button" data-reset hidden>Reset filters <Icon name="x" size={13} /></button></div>
   <div class="offer-grid">{offers.map(offer => <OfferCard offer={offer} searchable />)}</div>
   <div class="empty-state" data-empty hidden><Icon name="search" size={28} /><h2>No matching offers.</h2><p>Try a different search or reset your filters.</p><button class="button button-dark" type="button" data-empty-reset>Reset filters <Icon name="right" size={16} /></button></div>
