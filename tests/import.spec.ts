@@ -7,7 +7,7 @@ import { matchesBankCard } from '../src/lib/filtering';
 import { publicRoutes } from '../src/lib/routes';
 
 test('research import has distinct records, preserved duplicates and honest source dates', () => {
-  expect(researchOffers).toHaveLength(37);
+  expect(researchOffers).toHaveLength(36);
   expect(skippedExistingIds).toHaveLength(16);
   for (const id of skippedExistingIds) {
     expect(allOffers.filter(offer => offer.id === id)).toHaveLength(1);

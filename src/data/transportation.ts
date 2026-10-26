@@ -1,17 +1,25 @@
-import type { ResearchOffer as Offer } from './types';
+import type { Offer } from './types';
+
+const note = 'Prices and claiming steps supplied by the site owner on 26 October 2026. The official transport site did not expose readable terms during the source check; current fares and individual eligibility should be confirmed with Yerevan Municipality or Telcell.';
+
 export const transportationOffers: Offer[] = [{
-  slug: 'yerevan-student-transport', category: 'transportation', kind: 'transport', provider: 'Yerevan Municipality / Telcell', name: 'Yerevan Student Transport Pass',
-  benefit: '15% off', benefitLabel: 'eligible student transport passes',
-  summary: 'Discounted 30-, 90-, and 365-day passes for buses, trolleybuses, and the Yerevan Metro. Additional Telcell Wallet prices are documented.',
-  highlights: ['From 7,650 AMD / 30 days', 'Enrollment in Yerevan required'], status: 'Verification Required', tags: ['Public Transport'],
-  facts: [['Transport types','Buses, trolleybuses, Yerevan Metro'],['Student discount','15% on the documented pass prices.'],['Standard prices','30 days: 9,000 AMD; 90 days: 24,000 AMD; 365 days: 90,000 AMD.'],['Student prices','30 days: 7,650 AMD; 90 days: 20,400 AMD; 365 days: 76,500 AMD.'],['Telcell Wallet prices','30 days: 7,480 AMD; 90 days: 20,060 AMD; 365 days: 74,800 AMD.'],['Offer end date','Not documented.'],['Age restrictions','Not documented.']],
-  prices: [{ name: '30 days', standard: '9,000 AMD', student: '7,650 AMD', wallet: '7,480 AMD' },{ name: '90 days', standard: '24,000 AMD', student: '20,400 AMD', wallet: '20,060 AMD' },{ name: '365 days', standard: '90,000 AMD', student: '76,500 AMD', wallet: '74,800 AMD' }],
-  eligibility: ['Students enrolled at universities, colleges, and vocational educational institutions in Yerevan.','Enrollment must be registered in the relevant government database and linked to an Armenian Public Services Number (PSN/SSN).'],
-  documents: ['Passport or Armenian national ID.','Armenian PSN/SSN.','Student ID recommended when visiting a service center.','Date of birth for the online eligibility check.'],
-  restrictions: ['Purchased passes must be activated within 30 days.','Passes permit unlimited trips within their validity period, subject to the system’s usage restrictions.','The discount is applied when purchasing the pass.','If student status is not recognized, contact your institution to correct the enrollment record.','The official eligibility site requires client-side interaction; current eligibility and fares have not been independently confirmed.'],
-  steps: ['Ask your institution to confirm enrollment registration linked to your Armenian PSN/SSN.','Visit transport.yerevan.am and enter your PSN/SSN and date of birth to check eligibility.','If needed, visit an authorized Telcell service office or Yerevan Municipality service center with identification and your PSN/SSN.','Once eligibility is confirmed, purchase the discounted pass.','Activate the purchased pass within 30 days.'],
-  sections: [{ title: 'Choosing a pass', items: ['The research recommends a physical Telcell transport card for use without relying on a phone battery or internet connection.','Electronic passes purchased through Telcell Wallet have the lower prices listed above. Confirm current purchase and activation requirements.'] },{ title: 'Separate concession for eligible orphaned students', items: ['The research notes that eligible orphaned students can receive free public transport under a separate concession.','Detailed eligibility, documents, and application procedure are not provided. Confirm them with Yerevan Municipality; this is separate from the general 15% student discount.'] }],
-  sources: [{ label: 'Student discounts and eligibility', url: 'https://transport.yerevan.am/privilege' },{ label: 'Transport passes and eligibility check', url: 'https://transport.yerevan.am/' },{ label: 'Yerevan Municipality 2026 transport concessions', url: 'https://www.yerevan.am/hy/elders-decisions/482-n-1/' }],
-  researchFile: 'Transportation.odt', researchDate: null, researchPeriod: '2026 (no exact date supplied)', reviewedDate: '2026-10-26', verifiedDate: null,
-  verificationNote: 'The supplied document is labeled 2026 but has no exact research date. The official eligibility URL was accessed on 26 October 2026; it exposed no readable fare or eligibility information to the research browser. All prices and conditions require independent confirmation.',
+  id: 'yerevan-student-transport', slug: 'yerevan-student-transport',
+  category: 'transport-travel', categories: ['transport-travel'], kind: 'transport', benefitType: 'discount',
+  provider: 'Yerevan Public Transport / Telcell', name: '15% Student Discount on Yerevan Public Transport',
+  benefit: '15% off', benefitLabel: '30-, 90-, and 365-day student transport passes',
+  summary: 'Eligible students can purchase discounted Yerevan transport subscriptions: 7,650 AMD for 30 days, 20,400 AMD for 90 days, or 76,500 AMD for 365 days.',
+  highlights: ['30 days: 7,650 AMD instead of 9,000 AMD', '90 days: 20,400 AMD instead of 24,000 AMD', '365 days: 76,500 AMD instead of 90,000 AMD'],
+  publication: 'published', publicationBasis: 'research-snapshot', status: 'Verification Required',
+  tags: ['Public Transport', 'Student Verification'], price: null, expiresAt: null,
+  facts: [['Student discount', '15%'], ['30-day pass', '7,650 AMD instead of 9,000 AMD'], ['90-day pass', '20,400 AMD instead of 24,000 AMD'], ['365-day pass', '76,500 AMD instead of 90,000 AMD']],
+  eligibility: ['Students who qualify for the Yerevan municipal transport discount.', 'Student status must be registered in the relevant municipal system.'],
+  documents: ['Identity document and Public Services Number (PSN/SSN), when required.'],
+  requirements: { verification: ['Student status must be registered against your Public Services Number (PSN/SSN).', 'Present your identity document and PSN when required.'] },
+  steps: ['Make sure your student status is registered against your Public Services Number (PSN/SSN).', 'If your student status is not recognized, contact Telcell or the Yerevan Municipality to resolve the issue.', 'Present your identity document and PSN when required.', 'Purchase the discounted transport subscription.'],
+  restrictions: ['Municipal student eligibility must be confirmed in the relevant system.'],
+  sections: [{ title: 'Recommended way to use your pass', items: ['Use a physical Telcell transport card to store and use your subscription. This is a recommendation, not a mandatory requirement.'] }],
+  sources: [{ label: 'Official Yerevan transport system', url: 'https://transport.yerevan.am/' }],
+  researchFile: 'Site-owner transport update supplied in chat on 26 October 2026', researchDate: '2026-10-26', reviewedDate: '2026-10-26', verifiedDate: null,
+  verificationNote: note,
+  sourceVerification: { state: 'unverified', lastAttempted: '2026-10-26', lastChecked: null, note },
 }];

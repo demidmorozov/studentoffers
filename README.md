@@ -22,13 +22,13 @@ npm run preview
 
 ## What is implemented
 
-- Responsive monochrome directory, semantic navigation, native mobile menu, breadcrumbs, and a custom 404.
+- Responsive directory with pure white surfaces, black typography, neutral borders, semantic navigation, native mobile menu, breadcrumbs, and a custom 404. The header retains the brand; the footer contains only copyright and the independent-information note.
 - One unified directory with nine categories for local and international offers available to students studying in Armenia. Transport & Travel includes accommodation. Replaced geographic URLs have Cloudflare Pages redirects.
-- Published listings include 11 records with official-source checks and 37 explicitly labeled research snapshots from the supplied English compilation. Snapshot dates are separate from source-check dates; missing exact URLs remain visible. The import and original review are documented in `docs/unified-directory-review.md`.
+- Published listings include 12 records with official-source checks, 36 explicitly labeled research snapshots from the supplied English compilation, and the site-owner update for the regular 15% Yerevan student transport discount. Converse Bank Student Card is included in all five-card listings, selection options, and comparisons. Snapshot dates are separate from source-check dates; missing exact URLs remain visible. The import and original review are documented in `docs/unified-directory-review.md`.
 - Live search across providers, offer names, categories, benefits and eligibility. Optional bank-card selection persists across categories, includes offers requiring no specific card, supports a strict toggle, and has active-state/result counts and reset controls. Other eligibility requirements remain visible.
 - Banking comparison uses published card products only. Distinct cashback benefits reference parent cards; multi-category offers retain one record and one canonical detail page.
 - Honest empty states in categories without supplied research. No fictional jobs, scholarships, contact details, or testimonials.
-- About, research policy, submission guidelines, and contact pages. Submissions and project questions use the existing GitHub issue tracker; the site does not collect personal information.
+- Minimal About page, research policy, and submission guidelines. The Contact page and its navigation links are removed. Suggestions use the existing GitHub issue tracker; the site does not collect personal information.
 - Descriptive metadata, configurable canonical and Open Graph URLs, sitemap, robots.txt, and Cloudflare security/cache headers.
 
 The homepage and detail pages need no client-side application framework. Live filtering uses one small external JavaScript module, about 1.9 KB uncompressed. Listings and native navigation remain accessible with JavaScript disabled.
@@ -59,7 +59,7 @@ research/                 Original supplied ODT documents (preserved)
 src/data/                 Typed category definitions and offer records
   banking.ts              Card products and separate financing references
   mobile.ts               Ucom student plans
-  transportation.ts       Yerevan transport concession and fare table
+  transportation.ts       Regular 15% Yerevan student transport discount
   types.ts                Shared offer, source, status, and section types
   research-import.ts      English research snapshots and import provenance
   offers.ts               Combined directory and formatting helpers
@@ -110,7 +110,7 @@ The directory includes tests for publication gates, import provenance, missing s
 
 ## Research limitations
 
-The research is the primary content source. The English compilation is dated 26 October 2026 and has not been independently rechecked. Banking is dated 26 October 2026; mobile has no document date; transport says 2026 without an exact date. No unconfirmed offer is marked Active. The completed Amio promotion and Ameriabank scholarship are labeled Expired, and VTB iStudent is Archived. Full independent verification is still required before claiming current availability.
+The research is the primary content source. The English compilation is dated 26 October 2026 and has not been independently rechecked. Banking is dated 26 October 2026; mobile has no document date; the original transport document says 2026 without an exact date. The regular transport listing uses the site-owner update supplied on 26 October 2026 and clearly states that the transport site did not expose readable terms during checking. No unconfirmed offer is marked Active. The completed Amio promotion and Ameriabank scholarship are labeled Expired, and VTB iStudent is Archived. Full independent verification is still required before claiming current availability.
 
 The English Amio tariff is hosted at the bank's documented PDF URL. Some other official sources are in Armenian; the StudentOffers interface and summaries remain in English. GitHub sign-in is required to submit an issue.
 

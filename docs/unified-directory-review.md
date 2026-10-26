@@ -1,16 +1,26 @@
 # Unified directory review — 26 October 2026
 
+## Current publication and design update
+
+The directory now publishes 49 records: 12 with official-source checks and 37 research snapshots. Converse Bank Student Card is published through the existing verified-update data flow, with 1,000 AMD annual servicing, 4% annual AMD balance interest, free internet banking, one free associated current account, and bank-approved university eligibility. Its official product page was inspected on 26 October 2026. All five bank cards share the same category, selection, search, detail, and comparison components.
+
+The regular 15% Yerevan student transport offer is now the first Transport & Travel listing. It shows the site-owner's 30-, 90-, and 365-day pass prices and PSN-linked municipal eligibility steps. The physical Telcell transport card is a recommendation. Current fares were not independently confirmed because the official transport site exposed no readable terms. The old transportation detail URL now redirects directly to the regular offer's canonical detail URL.
+
+All page surfaces use white backgrounds with black type and neutral borders. Selected filters use borders, weight, and underlines. The header keeps its branding; the footer contains only the copyright and independent-information note. Contact is removed from pages, navigation, and the route inventory. About contains only the requested replacement copy.
+
+Validation: Astro/TypeScript reports no errors, warnings, or hints. The production build generates 65 HTML pages, and 1,237 internal links/assets/anchors pass. All 37 data/browser tests passed, including transport prices, search and bank-card filters, layout, navigation, white surfaces, screenshots, and accessibility. Tests used a temporary preview configuration on port 4322. Desktop/mobile previews are saved in ignored `test-results/`.
+
 ## English compilation import
 
-The current implementation contains 37 new listings from the user-supplied English compilation identified in the data as `Studentoffers_Codex_English_Import.txt`. The original chat attachment is not stored in this checkout. Import provenance is preserved in `src/data/research-import.ts`; these records have a research date of 26 October 2026, status Verification Required, no independent verification date, and no successful source-check date.
+The current implementation retains 36 listings from the user-supplied English compilation identified in the data as `Studentoffers_Codex_English_Import.txt`. The original chat attachment is not stored in this checkout. Import provenance is preserved in `src/data/research-import.ts`; these records have a research date of 26 October 2026, status Verification Required, no independent verification date, and no successful source-check date.
 
-The directory now publishes 48 records: the 11 source-checked records listed below and 37 research snapshots. Sixteen matching IDs are recorded as skipped so the original, richer records and their publication decisions remain intact. General references are labeled as references. Missing exact URLs are explained without creating provider links.
+After the compilation import, the directory published 48 records: the 11 source-checked records listed below and 37 research snapshots. Sixteen matching IDs are recorded as skipped so the original, richer records and their publication decisions remain intact. General references are labeled as references. Missing exact URLs are explained without creating provider links.
 
 ESNcard partners require ESNcard membership independently of ordinary student ID. Yell Extreme Park uses one record across three categories. The two general Visa promotions require an eligible Visa card and are not linked to a particular student card; their recorded expiry is 31 December 2026. Tuition assistance appears as information on the banking page, outside the offer list and comparison table.
 
 The import expands transport, entertainment, museums, electronics, fitness, food, ESNcard partners, and software. It does not establish live availability.
 
-Current validation: Astro/TypeScript reports no errors, warnings, or hints; the production build generates 65 HTML pages; all 1,426 internal links/assets/anchors pass; all 34 data/browser tests pass. Browser tests used a temporary configuration on port 4322 because port 4321 was already occupied. Offer terms were not independently rechecked during this continuation.
+Compilation import validation: Astro/TypeScript reports no errors, warnings, or hints; the production build generates 65 HTML pages; all 1,426 internal links/assets/anchors pass; all 34 data/browser tests pass. Browser tests used a temporary configuration on port 4322 because port 4321 was already occupied. Offer terms were not independently rechecked during this continuation.
 
 ## Original source-check review
 

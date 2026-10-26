@@ -3,6 +3,20 @@ import type { Offer, ResearchOffer } from './types';
 // These overrides contain only claims inspected on official sources on this date.
 export const checkedDate = '2026-10-26';
 export const verifiedUpdates: Record<string, Partial<Offer>> = {
+  'converse-student-card': {
+    name: 'Student Card', benefit: '4%', benefitLabel: 'annual interest on AMD balance · bank conditions apply',
+    summary: 'A student card with 1,000 AMD annual servicing, 4% annual interest on AMD balances, free internet banking, and one free associated current account, subject to bank conditions.',
+    highlights: ['1,000 AMD annual servicing', 'Free internet banking', 'One free associated current account'],
+    tags: ['Interest on Balance', 'Student Verification'], price: { amount: 1000, currency: 'AMD', period: 'year' },
+    facts: [['Annual card servicing', '1,000 AMD'], ['AMD balance interest', '4% annually, subject to bank conditions'], ['Internet banking', 'Free'], ['Associated current account', 'One account with free opening and servicing, subject to applicable terms'], ['Issuance', 'Free'], ['Currencies', 'AMD, USD, EUR'], ['Card types', 'Visa Classic / Mastercard Standard']],
+    eligibility: ['Students attending universities accepted by Converse Bank, subject to the bank’s requirements.'],
+    documents: ['Provide identity documents and proof of enrollment accepted by Converse Bank; confirm the application requirements with the bank.'],
+    restrictions: ['The university must be accepted by Converse Bank; enrollment at any university does not automatically qualify.', 'The 4% annual AMD interest rate is subject to bank conditions and applicable tax. Interest is calculated on the daily positive balance and paid quarterly.', 'The annual servicing fee is charged for the full year when the card is issued and is not refunded on early termination.', 'Free internet banking and one free associated current account do not waive other transaction or service charges.'],
+    steps: ['Confirm that Converse Bank accepts your university.', 'Apply with the identity and enrollment documents requested by the bank.', 'Confirm account terms and charges before ordering the card.'],
+    sections: [], promotion: undefined,
+    comparison: { issuance: 'Free', annual: '1,000 AMD', cashback: 'Not specified', interest: '4% annually on AMD; bank conditions apply', currencies: 'AMD, USD, EUR', age: 'Bank requirements apply', studentId: 'Accepted university and enrollment proof required' },
+    sources: [{ label: 'Converse Bank Student Card', url: 'https://conversebank.am/hy/studentcard/' }],
+  },
   'armeconombank-visa-student': {
     benefit: 'Student card', benefitLabel: 'Cashback benefits listed separately',
     summary: 'An AMD student card with free servicing and category-based cashback.',
@@ -48,11 +62,9 @@ export const verifiedUpdates: Record<string, Partial<Offer>> = {
 export const draftReasons: Record<string, string> = {
   'ameriabank-visa-student': 'Official product page returned navigation without readable product terms. Fees, benefits and eligibility remain unresolved.',
   'araratbank-mastercard-student': 'Official tariff is readable, but student eligibility, required proof and issuance fee remain unspecified.',
-  'converse-student-card': 'Official product tariff is readable; the approved-university list and complete application requirements have not been checked.',
   'amio-mastercard-student': 'Official English tariff is readable but defers to Armenian terms; student eligibility and the expired promotion require clarification. Resident status must not be conflated with citizenship.',
   'unibank-u-teenager': 'Promotion page confirms 18–21 QR applications; the separate card terms and researched 14–17 eligibility remain unchecked.',
   'vtb-istudent': 'Discontinued product; retained as an unpublished historical record.',
-  'yerevan-student-transport': 'Official eligibility page returned no readable fares or conditions. Researched prices cannot be confirmed.',
   'ameriabank-student-financing': 'Official page did not expose financing terms; repayment costs and eligibility remain unconfirmed.',
   'armeconombank-student-credit': 'Card page mentions a credit line but the linked loan terms and full borrowing costs have not been checked.',
   'vtb-student-loan': 'Official loan URL could not be retrieved; current availability and costs are unknown.',

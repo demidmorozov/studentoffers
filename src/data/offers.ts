@@ -24,7 +24,7 @@ function confirm(offer: Offer, note: string): Offer {
     verificationNote: note, sourceVerification: { state: 'verified', lastAttempted: checkedDate, lastChecked: checkedDate, note } };
 }
 
-const imported = [...bankCards, ...mobileOffers, ...transportationOffers, ...bankLoans, ...musicResearch()].map(importResearch);
+const imported = [...bankCards, ...mobileOffers, ...bankLoans, ...musicResearch()].map(importResearch);
 const reviewed = imported.map(offer => {
   const update = verifiedUpdates[offer.id];
   if (update) {
@@ -79,7 +79,7 @@ const fastArca: Offer = { ...fastVisa, id: 'fast-bank-arca-classic-student', slu
   facts: [['Student offer', 'One free card'], ['Servicing', 'Free throughout card validity']],
   comparison: { issuance: 'One card free', annual: 'Free for card validity', cashback: 'Not specified', interest: 'Not specified', currencies: 'Confirm with bank', age: 'Bank approval', studentId: 'Enrollment proof required' },
 };
-export const allOffers: Offer[] = [...reviewed, fastArca, ...benefits, ...researchOffers];
+export const allOffers: Offer[] = [...reviewed, fastArca, ...transportationOffers, ...benefits, ...researchOffers];
 assertOfferData(allOffers);
 export const offers = publishedOffers(allOffers, new Date().toISOString().slice(0, 10));
 export const drafts = allOffers.filter(offer => !offers.some(published => published.id === offer.id));

@@ -94,16 +94,6 @@ const esnOffers = esnPartners.map(partner => entry({
 const visaRequirements = { bankCardNetwork: 'Visa', verification: ['Requires an eligible Visa bank card under the specific promotion terms. Student status or a student Visa card alone does not establish eligibility.'] };
 export const researchOffers: Offer[] = [
   entry({
-    id: 'yerevan-student-orphan-transport', provider: 'Yerevan Public Transport', name: 'Student-orphan transport concession', category: 'transport-travel', kind: 'transport', benefitType: 'free-product',
-    benefit: 'Free transport', benefitLabel: 'only for the qualifying municipal concession category',
-    summary: 'Free qualifying transport for student orphans who satisfy Yerevan Municipality’s specific concession rules.',
-    highlights: ['Specific municipal eligibility required'], tags: ['Student ID', 'Other Eligibility'],
-    eligibility: ['Only students meeting the municipality’s student-orphan concession category.'],
-    requirements: { verification: ['Entitlement must be established under the municipal concession rules; exact documents were not supplied.'] },
-    restrictions: ['This is not free transport for every student.', 'Being enrolled alone does not establish the legal entitlement.'],
-    sources: [source('Municipal transport concessions', 'https://transport.yerevan.am/privilege')],
-  }),
-  entry({
     id: 'cinema-star-student-tickets', provider: 'Cinema Star', name: 'Weekday student tickets', category: 'entertainment',
     benefit: 'From 1,000 AMD', benefitLabel: '2D: 1,000 AMD · 3D: 1,500 AMD',
     summary: 'Student-priced 2D and 3D screenings Monday through Friday, 10:00–17:00.',

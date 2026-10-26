@@ -25,7 +25,7 @@ All three repository ODT files were read using Python's standard-library `zipfil
 - VTB iStudent: Visa/MIR family archived; issuance discontinued. Historical terms clearly identified. VTB education loan up to 5,000,000 AMD kept separate from discontinued card status.
 - Evocabank and Converse financing: included as research references with missing amounts/rates/repayment terms stated explicitly. No invented named loan program or application procedure.
 - Ucom: 2,500 AMD / 40 instead of 20 GB / 1,000 minutes / 500 SMS; 3,000 AMD / 120 instead of 40 GB / 1,500 minutes / 300 SMS; regional 2,000 AMD / 40 instead of 20 GB / 750 minutes / 300 SMS. Two-year data uplift is not treated as an enrollment deadline. One-use student ID/passport rule, stamped enrollment proof, identity document, new/existing subscribers, number portability, regional restrictions, and postpaid-term uncertainty preserved.
-- Yerevan: 15% student concession. Standard passes 9,000 / 24,000 / 90,000 AMD; student 7,650 / 20,400 / 76,500 AMD; Telcell Wallet 7,480 / 20,060 / 74,800 AMD. Institution in Yerevan and PSN-linked enrollment required. Pass activation within 30 days. Physical-card recommendation remains identified as a research recommendation. Separate free-transport concession for eligible orphaned students is described without inventing its application criteria.
+- Yerevan: 15% student concession. Standard passes 9,000 / 24,000 / 90,000 AMD; student 7,650 / 20,400 / 76,500 AMD; Telcell Wallet 7,480 / 20,060 / 74,800 AMD. Institution in Yerevan and PSN-linked enrollment required. Pass activation within 30 days. Physical-card recommendation remains identified as a research recommendation.
 
 ## Independent-source checks and limits
 

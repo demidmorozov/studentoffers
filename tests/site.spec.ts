@@ -18,7 +18,7 @@ test('homepage exposes nine categories, published counts and unified navigation'
   await page.goto('/');
   await expect(page.locator('h1')).toHaveText('Student discountsin Armenia');
   await expect(page.locator('.hero-copy')).toHaveText('Discover local and international offers available to students studying in Armenia.');
-  await expect(page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link')).toHaveText(['Discounts', 'About', 'Contact']);
+  await expect(page.getByRole('navigation', { name: 'Main navigation' }).getByRole('link')).toHaveText(['Discounts', 'About']);
   await expect(page.locator('.home-categories .category-card')).toHaveCount(categories.length);
   for (const category of categories) {
     const card = page.locator(`.home-categories a[href="${categoryPath(category)}"]`);
@@ -27,7 +27,7 @@ test('homepage exposes nine categories, published counts and unified navigation'
     await expect(card.locator('.category-top')).toContainText(`${count} ${count === 1 ? 'offer' : 'offers'}`);
   }
   await expect(page.locator('.home-categories')).not.toContainText('researched offers');
-  await expect(page.locator('.footer-inner > *')).toHaveText(['Studentoffers.am', '© 2026 StudentOffers', 'Independent information. Always check with the provider.']);
+  await expect(page.locator('.footer-inner > *')).toHaveText(['© 2026 StudentOffers', 'Independent information. Always check with the provider.']);
 });
 
 test('homepage and header searches reach current results', async ({ page }) => {
@@ -40,6 +40,66 @@ test('homepage and header searches reach current results', async ({ page }) => {
   await expect(page.locator(visibleOffers)).toHaveCount(1);
   await page.locator(visibleOffers).getByRole('link', { name: /View details/ }).click();
   await expect(page.locator('h1')).toHaveText('Premium Student');
+});
+
+test('regular student transport is prominent and searchable with the correct paid pass prices', async ({ page }) => {
+  await page.goto('/discounts/transport-travel/');
+  const regular = page.locator('[data-offer="yerevan-student-transport"]');
+  await expect(page.locator('[data-offer]').first()).toHaveAttribute('data-offer', 'yerevan-student-transport');
+  await expect(regular).toContainText('Yerevan Public Transport / Telcell');
+  await expect(regular).toContainText('15% off');
+  await regular.getByRole('link', { name: /View details/ }).click();
+  await expect(page.locator('h1')).toHaveText('15% Student Discount on Yerevan Public Transport');
+  for (const price of ['7,650 AMD instead of 9,000 AMD', '20,400 AMD instead of 24,000 AMD', '76,500 AMD instead of 90,000 AMD']) {
+    await expect(page.locator('.fact-list')).toContainText(price);
+  }
+  await expect(page.getByText('This is a recommendation, not a mandatory requirement.', { exact: false })).toBeVisible();
+  await expect(page.locator('ol.detail-list li')).toHaveCount(4);
+  await expect(page.locator('ol.detail-list')).toContainText('Public Services Number (PSN/SSN)');
+  await expect(page.locator('ol.detail-list')).toContainText('contact Telcell or the Yerevan Municipality');
+  await expect(page.getByRole('link', { name: /Visit official provider/ })).toHaveAttribute('href', 'https://transport.yerevan.am/');
+  await page.goto('/search/?q=Telcell%2015%25');
+  await expect(page.locator(visibleOffers)).toHaveCount(1);
+  await expect(page.locator(visibleOffers)).toHaveAttribute('data-offer', 'yerevan-student-transport');
+});
+
+test('Converse Student Card shares category, comparison, selection, search and detail data', async ({ page }) => {
+  await page.goto('/discounts/banking/?card=converse-student-card');
+  await expect(page.getByRole('combobox', { name: 'Bank card', exact: true })).toHaveValue('converse-student-card');
+  await expect(page.locator('[data-offer]')).toHaveCount(5);
+  await expect(page.locator('[data-offer="converse-student-card"]')).toContainText('1,000 AMD annual servicing');
+  const row = page.getByRole('row').filter({ has: page.getByRole('link', { name: 'Converse Bank Student Card' }) });
+  await expect(row).toContainText('1,000 AMD');
+  await expect(row).toContainText('4% annually on AMD; bank conditions apply');
+  await row.getByRole('link').click();
+  await expect(page.locator('h1')).toHaveText('Student Card');
+  await expect(page.locator('.fact-list')).toContainText('Free');
+  await expect(page.locator('.fact-list')).toContainText('One account with free opening and servicing');
+  await expect(page.locator('.detail-list')).toContainText(['Students attending universities accepted by Converse Bank']);
+  await expect(page.getByRole('link', { name: /Visit official provider/ })).toHaveAttribute('href', 'https://conversebank.am/hy/studentcard/');
+  await page.goto('/search/?q=Converse');
+  await expect(page.getByRole('combobox', { name: 'Bank card', exact: true })).toHaveValue('converse-student-card');
+  await expect(page.locator(visibleOffers)).toHaveCount(1);
+  await expect(page.locator(visibleOffers)).toHaveAttribute('data-offer', 'converse-student-card');
+  await page.reload();
+  await expect(page.locator(visibleOffers)).toHaveCount(1);
+});
+
+test('page surfaces stay white with black type across desktop and mobile', async ({ page }) => {
+  for (const width of [1440, 375]) {
+    await page.setViewportSize({ width, height: 950 });
+    for (const path of ['/', '/search/', ...categories.map(categoryPath), '/discounts/transport-travel/yerevan-student-transport/', '/discounts/banking/converse-student-card/', '/about/', '/about/research/', '/about/submit/']) {
+      await page.goto(path);
+      const violations = await page.locator('body').evaluate(body => [...body.querySelectorAll('*'), body, document.documentElement].flatMap(element => {
+        if (!element.getClientRects().length) return [];
+        const style = getComputedStyle(element);
+        const white = style.backgroundColor === 'rgb(255, 255, 255)' || style.backgroundColor === 'rgba(0, 0, 0, 0)';
+        return white && style.backgroundImage === 'none' && style.color === 'rgb(0, 0, 0)' ? [] : [`${element.tagName}.${element.getAttribute('class') ?? ''}: ${style.backgroundColor}, ${style.backgroundImage}, ${style.color}`];
+      }));
+      expect(violations, `${path} at ${width}px`).toEqual([]);
+      await expect(page.locator('body')).toHaveCSS('background-color', 'rgb(255, 255, 255)');
+    }
+  }
 });
 
 test('bank card filtering includes unrestricted offers, supports strict mode and resets', async ({ page }) => {
@@ -164,25 +224,26 @@ for (const width of [320, 375, 600, 768, 900, 1024, 1025, 1440]) {
     await page.getByRole('searchbox', { name: 'Search all offers', exact: true }).fill('Ucom');
     await page.getByRole('button', { name: 'Search all offers', exact: true }).click();
     await expect(page.locator(visibleOffers)).toHaveCount(3);
-    for (const path of ['/', '/discounts/', '/discounts/food-drinks/', '/discounts/transport-travel/', '/discounts/banking/', '/discounts/software/spotify-premium-student/', '/about/', '/about/contact/']) {
+    for (const path of ['/', '/discounts/', '/discounts/food-drinks/', '/discounts/transport-travel/', '/discounts/banking/', '/discounts/software/spotify-premium-student/', '/about/']) {
       await page.goto(path);
       expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), `${path} overflows at ${width}`).toBe(false);
     }
   });
 }
 
-test('mobile navigation preserves About and Contact pages', async ({ page }) => {
+test('mobile navigation reaches About and Contact is removed', async ({ page, request }) => {
   await page.setViewportSize({ width: 375, height: 812 });
   await page.goto('/');
   await page.getByLabel('Open navigation').click();
   const nav = page.getByRole('navigation', { name: 'Mobile navigation', exact: true });
-  await expect(nav.getByRole('link')).toHaveText(['Discounts', 'About', 'Contact']);
+  await expect(nav.getByRole('link')).toHaveText(['Discounts', 'About']);
   await nav.getByRole('link', { name: 'About', exact: true }).click();
-  await expect(page.locator('h1')).toContainText('More clarity.');
-  await page.getByLabel('Open navigation').click();
-  await nav.getByRole('link', { name: 'Contact', exact: true }).click();
-  await expect(page).toHaveURL(/\/about\/contact\/$/);
-  await expect(page.getByRole('link', { name: /Open the issue tracker/ })).toHaveAttribute('href', 'https://github.com/demidmorozov/studentoffers/issues');
+  await expect(page.locator('.about-copy')).toContainText("Our goal is to bring together the best offers available to students");
+  await expect(page.getByRole('link', { name: 'Contact', exact: true })).toHaveCount(0);
+  expect((await request.get('/about/contact/')).status()).toBe(404);
+  expect(publicRoutes).not.toContain('/about/contact/');
+  const xml = await (await sitemap({ site: new URL('https://studentoffers.example') } as Parameters<typeof sitemap>[0])).text();
+  expect(xml).not.toContain('/about/contact/');
 });
 
 test('directory and navigation remain usable without JavaScript', async ({ browser }) => {
@@ -221,7 +282,7 @@ test('Cloudflare content security policy permits search and local assets', async
 test('representative desktop and mobile pages pass WCAG AA checks', async ({ page }) => {
   for (const width of [1440, 375]) {
     await page.setViewportSize({ width, height: 950 });
-    for (const path of ['/', '/search/', '/discounts/food-drinks/', '/discounts/software/spotify-premium-student/', '/about/contact/']) {
+    for (const path of ['/', '/search/', '/discounts/food-drinks/', '/discounts/software/spotify-premium-student/', '/about/']) {
       await page.goto(path);
       const result = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze();
       expect(result.violations, `${path} at ${width}: ${JSON.stringify(result.violations)}`).toEqual([]);
@@ -232,11 +293,16 @@ test('representative desktop and mobile pages pass WCAG AA checks', async ({ pag
 test('capture final desktop and mobile layouts', async ({ page }) => {
   for (const [size, width] of [['desktop', 1440], ['mobile', 375]] as const) {
     await page.setViewportSize({ width, height: 1000 });
-    await page.goto('/');
-    await page.screenshot({ path: `test-results/home-${size}.png`, fullPage: true });
-    await page.goto('/discounts/food-drinks/?card=armeconombank-visa-student&only=1');
-    await page.screenshot({ path: `test-results/card-filter-${size}.png`, fullPage: true });
-    await page.goto('/discounts/food-drinks/aeb-student-fast-food-cashback/');
-    await page.screenshot({ path: `test-results/card-benefit-${size}.png`, fullPage: true });
+    for (const [name, path] of [
+      ['home', '/'],
+      ['card-filter', '/discounts/food-drinks/?card=armeconombank-visa-student&only=1'],
+      ['card-benefit', '/discounts/food-drinks/aeb-student-fast-food-cashback/'],
+      ['transport', '/discounts/transport-travel/?card='],
+      ['converse', '/discounts/banking/converse-student-card/'],
+      ['about', '/about/'],
+    ]) {
+      await page.goto(path);
+      await page.screenshot({ path: `test-results/${name}-${size}.png`, fullPage: true });
+    }
   }
 });
