@@ -1,0 +1,28 @@
+---
+import type { Offer } from '../data/types';
+import { categories } from '../data/categories';
+import { formatDate, disclaimer } from '../data/offers';
+import Layout from '../layouts/Layout.astro';
+import Breadcrumbs from './Breadcrumbs.astro';
+import Status from './Status.astro';
+import Icon from './Icon.astro';
+interface Props { offer: Offer; }
+const { offer } = Astro.props;
+const category = categories.find(c => c.slug === offer.category)!;
+---
+<Layout title={`${offer.provider} ${offer.name}`} description={`${offer.summary} See eligibility, documented conditions, and official sources.`}>
+  <div class="container"><Breadcrumbs items={[{ label: 'Student Discounts', href: '/discounts/' },{ label: category.title, href: `/discounts/${category.slug}/` },{ label: offer.name }]} />
+    <header class="detail-hero"><div><span class="eyebrow">{offer.provider} / {category.title}</span><h1>{offer.name}</h1><p>{offer.summary}</p><Status status={offer.status} /></div><div class="detail-benefit"><strong>{offer.benefit}</strong><span>{offer.benefitLabel}</span></div></header>
+    <div class="detail-layout"><article>
+      <section class="detail-section"><h2>At a glance</h2><dl class="fact-list">{offer.facts.map(([label,value]) => <div><dt>{label}</dt><dd>{value}</dd></div>)}</dl></section>
+      {offer.prices && <section class="detail-section"><h2>Pass prices</h2><div class="table-scroll" role="region" aria-label="Transport pass price comparison" tabindex="0"><table><caption>Prices transcribed from the 2026 transportation research; current fares require confirmation.</caption><thead><tr><th scope="col">Pass</th><th scope="col">Standard</th><th scope="col">Student</th><th scope="col">Telcell Wallet</th></tr></thead><tbody>{offer.prices.map(price => <tr><th scope="row">{price.name}</th><td>{price.standard}</td><td>{price.student}</td><td>{price.wallet}</td></tr>)}</tbody></table></div></section>}
+      <section class="detail-section"><h2>Who is eligible?</h2><ul class="detail-list">{offer.eligibility.map(item => <li>{item}</li>)}</ul></section>
+      <section class="detail-section"><h2>Documents you’ll need</h2><ul class="detail-list">{offer.documents.map(item => <li>{item}</li>)}</ul></section>
+      {offer.steps && <section class="detail-section"><h2>{offer.kind === 'transport' ? 'How to claim the discount' : 'How to apply'}</h2><ol class="detail-list">{offer.steps.map(item => <li>{item}</li>)}</ol></section>}
+      <section class="detail-section"><h2>Important conditions</h2><ul class="detail-list">{offer.restrictions.map(item => <li>{item}</li>)}</ul></section>
+      {offer.promotion && <section class="detail-section"><h2>Promotion dates <Status status={offer.promotion.status} /></h2><p class="small-note mb-3">{offer.promotion.start ? formatDate(offer.promotion.start) : 'Start not documented'} — {offer.promotion.end ? formatDate(offer.promotion.end) : 'End not documented'}</p><p class="small-note">{offer.promotion.description}</p></section>}
+      {offer.sections?.map(section => <section class="detail-section"><h2>{section.title}{section.status && <Status status={section.status} />}</h2><ul class="detail-list">{section.items.map(item => <li>{item}</li>)}</ul></section>)}
+      <div class="notice"><Icon name="info" size={16} /><p>{disclaimer}</p></div><a href={`/discounts/${category.slug}/`} class="text-link mt-7"><Icon name="back" size={16} />Back to {category.title}</a>
+    </article><aside class="detail-sidebar" aria-label="Official sources and research details"><section class="sidebar-box"><h2>Go to the source.</h2><a class="button button-dark" href={offer.sources[0].url} target="_blank" rel="noopener noreferrer">Visit official provider <Icon name="arrow" size={15} /><span class="sr-only"> (opens in a new tab)</span></a><ul class="source-links">{offer.sources.map(source => <li><a href={source.url} target="_blank" rel="noopener noreferrer">{source.label}<Icon name="external" size={12} /><span class="sr-only"> (opens in a new tab)</span></a></li>)}</ul><p>StudentOffers is an independent directory. Applications and eligibility checks take place with the provider.</p></section><section class="sidebar-box"><h2>Research & verification</h2><Status status={offer.status} /><dl class="meta-list"><dt>Research document</dt><dd>{offer.researchFile}</dd><dt>Document research date</dt><dd>{offer.researchPeriod ?? formatDate(offer.researchDate)}</dd><dt>Document reviewed for this site</dt><dd>{formatDate(offer.reviewedDate)}</dd><dt>Independent full verification</dt><dd>{offer.verifiedDate ? formatDate(offer.verifiedDate) : 'Not completed'}</dd></dl><p>{offer.verificationNote}</p><a class="text-link mt-4" href="/about/research/">Our research policy <Icon name="arrow" size={13} /></a></section></aside></div>
+  </div>
+</Layout>

@@ -1,0 +1,7 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import OfferBrowser from '../components/OfferBrowser.astro';
+import { offers, disclaimer } from '../data/offers';
+---
+<Layout title="Search student offers" noindex><div class="container page-content"><Breadcrumbs items={[{ label: 'Search' }]} /><div class="page-heading"><span class="eyebrow">The complete directory</span><h1>Find your next advantage.</h1><p>Search by provider, offer, category, or benefit. Filter the documented offers to find what fits your student life.</p></div><OfferBrowser offers={offers} /><p class="small-note">{disclaimer}</p></div></Layout>

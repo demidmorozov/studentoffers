@@ -1,0 +1,10 @@
+---
+import Icon from './Icon.astro';
+interface Props { title: string; description: string; icon: string; href: string; count?: number; index?: string; }
+const { title, description, icon, href, count, index } = Astro.props;
+---
+<a href={href} class="category-card group">
+  <div class="category-top"><Icon name={icon} size={23} /><span>{index ?? (count ? `${count} researched offers` : 'Explore category')}</span></div>
+  <div><h3>{title}</h3><p>{description}</p></div>
+  <div class="category-bottom"><span>{count ? 'Browse research' : 'Explore'}<span class="sr-only">: {title}</span></span><Icon name="right" size={18} /></div>
+</a>

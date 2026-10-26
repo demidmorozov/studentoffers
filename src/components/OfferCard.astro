@@ -1,0 +1,20 @@
+---
+import type { Offer } from '../data/types';
+import { offerPath } from '../data/types';
+import { categories } from '../data/categories';
+import Icon from './Icon.astro';
+import Status from './Status.astro';
+interface Props { offer: Offer; searchable?: boolean; }
+const { offer, searchable = false } = Astro.props;
+const category = categories.find(c => c.slug === offer.category);
+const documentedFacts = offer.facts.filter(([, value]) => !/not documented|not specified|confirm with/i.test(value)).flat();
+const search = [offer.provider, offer.name, category?.title, offer.benefit, offer.benefitLabel, offer.summary, ...offer.highlights, ...offer.tags, ...documentedFacts].join(' ');
+---
+<article class="offer-card" data-offer={searchable ? '' : undefined} data-search={searchable ? search : undefined} data-tags={searchable ? JSON.stringify(offer.tags) : undefined} data-status={searchable ? offer.status : undefined} data-kind={searchable ? offer.kind : undefined}>
+  <div class="offer-top"><span class="provider">{offer.provider}</span><Icon name={category?.icon ?? 'wallet'} size={19} /></div>
+  <h3><a href={offerPath(offer)}>{offer.name}</a></h3>
+  <div class:list={['offer-benefit', { 'benefit-long': offer.benefit.length > 13 }]}>{offer.benefit}</div>
+  <p class="benefit-label">{offer.benefitLabel}</p>
+  <ul class="offer-highlights">{offer.highlights.map(highlight => <li>{highlight}</li>)}</ul>
+  <div class="offer-bottom"><Status status={offer.status} /><a href={offerPath(offer)} aria-label={`View details for ${offer.provider} ${offer.name}`}>View details <Icon name="arrow" size={15} /></a></div>
+</article>

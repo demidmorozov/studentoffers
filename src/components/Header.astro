@@ -1,0 +1,15 @@
+---
+import Navigation from './Navigation.astro';
+import Icon from './Icon.astro';
+---
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="/" aria-label="StudentOffers home"><span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i></span>StudentOffers<span class="brand-country">AM</span></a>
+    <div class="desktop-nav"><Navigation /></div>
+    <a href="/search/" class="header-search" aria-label="Search all offers"><Icon name="search" size={19} /></a>
+    <details class="mobile-nav">
+      <summary aria-label="Open navigation"><Icon name="menu" /><span>Menu</span></summary>
+      <Navigation mobile />
+    </details>
+  </div>
+</header>

@@ -1,0 +1,50 @@
+export const normalize = (value: string) => value.normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+export function setupOfferBrowsers() {
+  document.querySelectorAll<HTMLElement>('[data-offer-browser]').forEach(root => {
+    const query = root.querySelector<HTMLInputElement>('[data-query]')!;
+    const chips = [...root.querySelectorAll<HTMLInputElement>('[data-filter]')];
+    const status = root.querySelector<HTMLSelectElement>('[data-status-filter]');
+    const kind = root.querySelector<HTMLSelectElement>('[data-kind-filter]');
+    const cards = [...root.querySelectorAll<HTMLElement>('[data-offer]')];
+    const count = root.querySelector<HTMLElement>('[data-count]')!;
+    const reset = root.querySelector<HTMLButtonElement>('[data-reset]')!;
+    const empty = root.querySelector<HTMLElement>('[data-empty]')!;
+    const panel = root.querySelector<HTMLElement>('[data-search-panel]')!;
+    const params = new URLSearchParams(location.search);
+    query.value = params.get('q') ?? '';
+    chips.forEach(chip => { chip.checked = params.getAll('filter').includes(chip.value); });
+    if (status && [...status.options].some(o => o.value === params.get('status'))) status.value = params.get('status')!;
+    if (kind && [...kind.options].some(o => o.value === params.get('type'))) kind.value = params.get('type')!;
+    panel.hidden = false;
+    function update() {
+      const terms = normalize(query.value).split(/\s+/).filter(Boolean);
+      const tags = chips.filter(c => c.checked).map(c => c.value);
+      let matches = 0;
+      cards.forEach(card => {
+        const text = normalize(card.dataset.search ?? '');
+        const cardTags = JSON.parse(card.dataset.tags ?? '[]') as string[];
+        const visible = terms.every(term => text.includes(term)) && tags.every(tag => cardTags.includes(tag)) && (!status?.value || card.dataset.status === status.value) && (!kind?.value || card.dataset.kind === kind.value);
+        card.hidden = !visible;
+        if (visible) matches++;
+      });
+      count.textContent = `${matches} ${matches === 1 ? 'offer' : 'offers'}${matches !== cards.length ? ` of ${cards.length}` : ''}`;
+      empty.hidden = matches !== 0;
+      reset.hidden = !query.value && !tags.length && !status?.value && !kind?.value;
+      const next = new URLSearchParams();
+      if (query.value.trim()) next.set('q', query.value.trim());
+      tags.forEach(tag => next.append('filter', tag));
+      if (status?.value) next.set('status', status.value);
+      if (kind?.value) next.set('type', kind.value);
+      const suffix = next.toString();
+      history.replaceState(null, '', `${location.pathname}${suffix ? `?${suffix}` : ''}${location.hash}`);
+    }
+    function clear() { query.value = ''; chips.forEach(c => { c.checked = false; }); if (status) status.value = ''; if (kind) kind.value = ''; update(); query.focus(); }
+    query.addEventListener('input', update);
+    chips.forEach(chip => chip.addEventListener('change', update));
+    status?.addEventListener('change', update);
+    kind?.addEventListener('change', update);
+    reset.addEventListener('click', clear);
+    root.querySelector('[data-empty-reset]')?.addEventListener('click', clear);
+    update();
+  });
+}

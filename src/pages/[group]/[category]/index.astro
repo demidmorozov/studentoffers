@@ -1,0 +1,19 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import OfferBrowser from '../../../components/OfferBrowser.astro';
+import ComparisonTable from '../../../components/ComparisonTable.astro';
+import Icon from '../../../components/Icon.astro';
+import { categories, groups } from '../../../data/categories';
+import { offers, disclaimer } from '../../../data/offers';
+export function getStaticPaths() { return categories.map(category => ({ params: { group: category.group, category: category.slug }, props: { category } })); }
+const { category } = Astro.props;
+const group = groups.find(g => g.slug === category.group)!;
+const categoryOffers = offers.filter(o => o.category === category.slug);
+---
+<Layout title={category.title} description={`${category.description} Research, eligibility, official sources, and conditions for students in Armenia.`}>
+  <div class="container page-content"><Breadcrumbs items={[{ label: group.title, href: `/${group.slug}/` }, { label: category.title }]} />
+    <div class="page-heading page-heading-row"><div><span class="eyebrow">{group.title}</span><h1>{category.title}</h1><p>{category.description}{categoryOffers.length > 0 && ' Explore the research, compare the details, and check current terms with the provider.'}</p></div>{category.slug === 'banking' && <a href="#compare" class="button"><Icon name="list" size={16} />Compare bank cards</a>}</div>
+    {categoryOffers.length > 0 ? <><div class="notice"><Icon name="info" size={16} /><p>These listings come from the supplied research and need current confirmation. {disclaimer} <a href="/about/research/">Read our research policy.</a></p></div><OfferBrowser offers={categoryOffers} />{category.slug === 'banking' && <section id="compare" class="comparison-section"><div class="section-heading"><div><h2 class="section-title">Compare student bank cards.</h2><p>Documented terms, side by side. Financing options are listed separately in the directory above.</p></div></div><ComparisonTable /></section>}<p class="small-note">{disclaimer}</p></> : <div class="empty-state"><Icon name={category.icon} size={28} /><span class="eyebrow mb-3">A space for what’s next</span><h2>No verified offers yet.</h2><p>We haven’t published researched offers in this category. Explore the existing research or learn how to suggest an opportunity.</p><div class="flex flex-wrap justify-center gap-3"><a class="button button-dark" href="/discounts/">Explore student discounts <Icon name="right" size={16} /></a><a class="button" href="/about/submit/">Submission guidelines</a></div></div>}
+  </div>
+</Layout>

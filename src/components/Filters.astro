@@ -1,0 +1,12 @@
+---
+interface Props { tags: string[]; statuses: string[]; kinds: string[]; }
+const { tags, statuses, kinds } = Astro.props;
+const kindLabels: Record<string, string> = { card: 'Bank cards', loan: 'Education financing', mobile: 'Mobile plans', transport: 'Transport passes' };
+---
+<div class="filter-row">
+  {tags.length > 0 && <fieldset class="filter-chips"><legend class="sr-only">Filter by benefit or plan type; selected filters combine</legend>{tags.map(tag => <label class="filter-chip"><input type="checkbox" value={tag} data-filter /><span>{tag}</span></label>)}</fieldset>}
+  <div class="select-filters">
+    {kinds.length > 1 && <label class="select-label"><span class="sr-only">Offer type</span><select data-kind-filter aria-label="Offer type"><option value="">All types</option>{kinds.map(kind => <option value={kind}>{kindLabels[kind]}</option>)}</select></label>}
+    {statuses.length > 1 && <label class="select-label"><span class="sr-only">Offer status</span><select data-status-filter aria-label="Offer status"><option value="">All statuses</option>{statuses.map(status => <option value={status}>{status}</option>)}</select></label>}
+  </div>
+</div>

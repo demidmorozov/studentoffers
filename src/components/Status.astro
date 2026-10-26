@@ -1,0 +1,6 @@
+---
+import type { OfferStatus } from '../data/types';
+interface Props { status: OfferStatus; }
+const { status } = Astro.props;
+---
+<span class:list={['status', { 'status-muted': status === 'Archived' || status === 'Expired' }]}><span class="status-dot" aria-hidden="true"></span>{status}</span>

@@ -1,0 +1,13 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import CategoryCard from '../../components/CategoryCard.astro';
+import { categories, groups, categoryPath } from '../../data/categories';
+import { offers } from '../../data/offers';
+export function getStaticPaths() { return groups.map(group => ({ params: { group: group.slug }, props: { group } })); }
+const { group } = Astro.props;
+const children = categories.filter(c => c.group === group.slug);
+---
+<Layout title={group.title} description={`${group.description} Explore ${group.title.toLowerCase()} for students in Armenia.`}>
+  <div class="container"><Breadcrumbs items={[{ label: group.title }]} /><div class="page-heading"><span class="eyebrow">Explore the directory</span><h1>{group.title}</h1><p>{group.description} Choose a category to see documented offers and their conditions.</p></div><div class="category-grid subcategories">{children.map(category => <CategoryCard {...category} href={categoryPath(category)} count={offers.filter(o => o.category === category.slug).length} />)}</div></div>
+</Layout>

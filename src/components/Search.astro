@@ -1,0 +1,6 @@
+---
+import Icon from './Icon.astro';
+interface Props { directory?: boolean; }
+const { directory = false } = Astro.props;
+---
+{directory ? <div class="search-field"><Icon name="search" size={19} /><label for="offer-query" class="sr-only">Search by provider, offer, category, or benefit</label><input id="offer-query" data-query type="search" placeholder="Search providers, offers, or benefits…" autocomplete="off" /></div> : <form action="/search/" class="home-search" role="search"><Icon name="search" size={20} /><label for="global-query" class="sr-only">Search student offers</label><input id="global-query" type="search" name="q" placeholder="Search discounts, providers, opportunities…" /><button type="submit">Search <Icon name="right" size={16} /></button></form>}

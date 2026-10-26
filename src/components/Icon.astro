@@ -1,0 +1,8 @@
+---
+import { ArrowUpRight, ArrowRight, Search, Wallet, BriefcaseBusiness, BookOpen, Compass, Coffee, Smartphone, Laptop, Ticket, TramFront, ShoppingBag, Activity, Code, Clock, GraduationCap, CalendarDays, Globe, ArrowLeft, ChevronDown, Menu, SlidersHorizontal, X, Check, ExternalLink, FileText, Info, ListFilter } from '@lucide/astro';
+const icons = { arrow: ArrowUpRight, right: ArrowRight, search: Search, wallet: Wallet, briefcase: BriefcaseBusiness, book: BookOpen, compass: Compass, coffee: Coffee, smartphone: Smartphone, laptop: Laptop, ticket: Ticket, train: TramFront, bag: ShoppingBag, activity: Activity, code: Code, clock: Clock, graduation: GraduationCap, calendar: CalendarDays, globe: Globe, back: ArrowLeft, down: ChevronDown, menu: Menu, filter: SlidersHorizontal, x: X, check: Check, external: ExternalLink, file: FileText, info: Info, list: ListFilter };
+interface Props { name: string; size?: number; class?: string; }
+const { name, size = 20, class: className } = Astro.props;
+const Component = icons[name as keyof typeof icons] ?? ArrowUpRight;
+---
+<Component size={size} stroke-width={1.6} class={className} aria-hidden="true" />
