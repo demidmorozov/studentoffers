@@ -1,5 +1,5 @@
 export type OfferStatus = 'Active' | 'Verification Required' | 'Expired' | 'Archived';
-export interface Source { label: string; url: string; }
+export interface Source { label: string; url: string; kind?: 'reference'; }
 export interface Section { title: string; items: string[]; status?: OfferStatus; }
 export type CategorySlug = 'food-drinks' | 'banking' | 'mobile-internet' | 'electronics' | 'entertainment' | 'transport-travel' | 'shopping' | 'sports' | 'software';
 export type BenefitType = 'cashback' | 'discount' | 'free-product' | 'paid-plan' | 'bank-card' | 'financing';
@@ -37,11 +37,13 @@ export interface Offer extends Omit<ResearchOffer, 'category'> {
   category: CategorySlug;
   categories: CategorySlug[];
   publication: 'published' | 'draft';
+  publicationBasis?: 'research-snapshot';
+  sourceNote?: string;
   draftReason?: string;
   benefitType: BenefitType;
   price: { amount: number; currency: string; period?: string } | null;
   parentId?: string;
-  requirements: { bankCardId?: string; membership?: string; university?: string; verification: string[] };
+  requirements: { bankCardId?: string; bankCardNetwork?: string; membership?: string; university?: string; verification: string[] };
   sourceVerification: { state: 'verified' | 'unverified'; lastAttempted: string | null; lastChecked: string | null; note: string };
   expiresAt: string | null;
 }

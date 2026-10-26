@@ -12,6 +12,8 @@ const { offer } = Astro.props;
 const category = categories.find(c => c.slug === offer.category)!;
 const requirements = resolvedRequirements(offer, offers);
 const parentCard = offers.find(card => card.id === requirements.bankCardId);
+const primarySource = offer.sources[0];
+const isResearch = offer.publicationBasis === 'research-snapshot';
 const labels = { cashback: 'Cashback', discount: 'Discount', 'free-product': 'Free product', 'paid-plan': 'Paid student plan', 'bank-card': 'Bank card', financing: 'Repayable financing' };
 ---
 <Layout title={`${offer.provider} ${offer.name}`} description={offer.summary}>
@@ -28,8 +30,9 @@ const labels = { cashback: 'Cashback', discount: 'Discount', 'free-product': 'Fr
         <section class="detail-section"><h2>At a glance</h2><dl class="fact-list"><div><dt>Benefit type</dt><dd>{labels[offer.benefitType]}</dd></div>{offer.price && <div><dt>Price</dt><dd>{offer.price.amount.toLocaleString('en-US')} {offer.price.currency}{offer.price.period && ` / ${offer.price.period}`}</dd></div>}{offer.facts.map(([label, value]) => <div><dt>{label}</dt><dd>{value}</dd></div>)}</dl></section>
         <section class="detail-section"><h2>Who is eligible?</h2>
           {parentCard && <p class="requirement-callout">Requires <a href={offerPath(parentCard)}>{parentCard.provider} {parentCard.name}</a>. The card’s shared eligibility and exclusions apply.</p>}
+          {requirements.bankCardNetwork && <p class="requirement-callout">Eligible {requirements.bankCardNetwork} bank card required. This is not a student-exclusive offer; a student Visa card does not automatically qualify.</p>}
           <ul class="detail-list">{requirements.membership && <li>Requires {requirements.membership}.</li>}{requirements.university && <li>{requirements.university} required.</li>}{requirements.eligibility.map(item => <li>{item}</li>)}</ul>
-          {!parentCard && <p class="small-note">No specific bank card is required for this offer. Other eligibility conditions still apply.</p>}
+          {!parentCard && !requirements.bankCardNetwork && <p class="small-note">No specific bank card is required for this offer. Other eligibility conditions still apply.</p>}
         </section>
         <section class="detail-section"><h2>Verification requirements</h2><ul class="detail-list">{requirements.verification.map(item => <li>{item}</li>)}</ul></section>
         {offer.steps?.length && <section class="detail-section"><h2>How to redeem or apply</h2><ol class="detail-list">{offer.steps.map(item => <li>{item}</li>)}</ol></section>}
@@ -40,8 +43,8 @@ const labels = { cashback: 'Cashback', discount: 'Discount', 'free-product': 'Fr
         <a href={categoryPath(category)} class="text-link mt-7"><Icon name="back" size={16} />Back to {category.title}</a>
       </article>
       <aside class="detail-sidebar" aria-label="Official sources and verification">
-        <section class="sidebar-box"><h2>Go to the source.</h2><a class="button button-dark" href={offer.sources[0].url} target="_blank" rel="noopener noreferrer">Visit official provider <Icon name="arrow" size={15} /><span class="sr-only"> (opens in a new tab)</span></a><ul class="source-links">{offer.sources.map(source => <li><a href={source.url} target="_blank" rel="noopener noreferrer">{source.label}<Icon name="external" size={12} /><span class="sr-only"> (opens in a new tab)</span></a></li>)}</ul><p>Applications and eligibility checks take place with the provider.</p></section>
-        <section class="sidebar-box"><h2>Source verification</h2><dl class="meta-list"><dt>Last successfully checked</dt><dd>{formatDate(offer.sourceVerification.lastChecked)}</dd><dt>Expiry date</dt><dd>{formatDate(offer.expiresAt)}</dd></dl><p>{offer.sourceVerification.note}</p><p>A checked source does not mean every student qualifies. Review the eligibility requirements above.</p><a class="text-link mt-4" href="/about/research/">Our research policy <Icon name="arrow" size={13} /></a></section>
+        <section class="sidebar-box"><h2>{isResearch ? 'Research sources' : 'Go to the source.'}</h2>{primarySource && <a class="button button-dark" href={primarySource.url} target="_blank" rel="noopener noreferrer">{primarySource.kind === 'reference' ? 'View research reference' : 'Visit official provider'} <Icon name="arrow" size={15} /><span class="sr-only"> (opens in a new tab)</span></a>}{offer.sources.length > 0 && <ul class="source-links">{offer.sources.map(source => <li><a href={source.url} target="_blank" rel="noopener noreferrer">{source.label}<Icon name="external" size={12} /><span class="sr-only"> (opens in a new tab)</span></a></li>)}</ul>}{offer.sourceNote && <p>{offer.sourceNote}</p>}<p>Applications and eligibility checks take place with the provider.</p></section>
+        <section class="sidebar-box"><h2>Source verification</h2><dl class="meta-list">{isResearch && <><dt>Research snapshot</dt><dd>{formatDate(offer.researchDate)}</dd></>}<dt>Last successfully checked</dt><dd>{isResearch ? 'Not independently checked' : formatDate(offer.sourceVerification.lastChecked)}</dd><dt>Expiry date</dt><dd>{formatDate(offer.expiresAt)}</dd></dl><p>{offer.sourceVerification.note}</p><p>{isResearch ? 'This research snapshot does not establish current availability or your eligibility. Review the requirements above.' : 'A checked source does not mean every student qualifies. Review the eligibility requirements above.'}</p><a class="text-link mt-4" href="/about/research/">Our research policy <Icon name="arrow" size={13} /></a></section>
       </aside>
     </div>
   </div>

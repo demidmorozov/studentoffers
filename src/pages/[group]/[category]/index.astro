@@ -6,14 +6,17 @@ import ComparisonTable from '../../../components/ComparisonTable.astro';
 import Icon from '../../../components/Icon.astro';
 import { categories, groups } from '../../../data/categories';
 import { offersInCategory, disclaimer } from '../../../data/offers';
+import { tuitionAssistance } from '../../../data/research-import';
 export function getStaticPaths() { return categories.map(category => ({ params: { group: category.group, category: category.slug }, props: { category } })); }
 const { category } = Astro.props;
 const group = groups.find(g => g.slug === category.group)!;
 const categoryOffers = offersInCategory(category.slug);
+const includesResearch = categoryOffers.some(offer => offer.publicationBasis === 'research-snapshot');
 ---
 <Layout title={category.title} description={`${category.description} Research, eligibility, official sources, and conditions for students in Armenia.`}>
   <div class="container page-content"><Breadcrumbs items={[{ label: group.title, href: `/${group.slug}/` }, { label: category.title }]} />
     <div class="page-heading page-heading-row"><div><span class="eyebrow">{group.title}</span><h1>{category.title}</h1><p>{category.description}{categoryOffers.length > 0 && ' Explore the research, compare the details, and check current terms with the provider.'}</p></div>{category.slug === 'banking' && <a href="#compare" class="button"><Icon name="list" size={16} />Compare bank cards</a>}</div>
-    {categoryOffers.length > 0 ? <><div class="notice"><Icon name="info" size={16} /><p>Official sources have been checked. Each offer’s eligibility and exclusions still apply. {disclaimer}</p></div><OfferBrowser offers={categoryOffers} category={category.slug} />{category.slug === 'banking' && <section id="compare" class="comparison-section"><div class="section-heading"><div><h2 class="section-title">Compare student bank cards.</h2><p>Published card terms, side by side.</p></div></div><ComparisonTable /></section>}<p class="small-note">{disclaimer}</p></> : <div class="empty-state"><Icon name={category.icon} size={28} /><h2>No published offers yet.</h2><p>Offers will appear here once their terms and eligibility can be confirmed.</p><a class="button button-dark" href="/discounts/">Explore discounts <Icon name="right" size={16} /></a></div>}
+    {category.slug === 'banking' && <aside class="notice" aria-label="Education assistance information"><Icon name="info" size={16} /><p><strong>{tuitionAssistance.title}.</strong> {tuitionAssistance.description} <a href={tuitionAssistance.sourceUrl}>{tuitionAssistance.sourceLabel}</a>.</p></aside>}
+    {categoryOffers.length > 0 ? <><div class="notice"><Icon name="info" size={16} /><p>{includesResearch ? 'Includes research snapshots that have not been independently rechecked. Each offer’s eligibility and exclusions still apply.' : 'Official sources have been checked. Each offer’s eligibility and exclusions still apply.'} {disclaimer}</p></div><OfferBrowser offers={categoryOffers} category={category.slug} />{category.slug === 'banking' && <section id="compare" class="comparison-section"><div class="section-heading"><div><h2 class="section-title">Compare student bank cards.</h2><p>Published card terms, side by side.</p></div></div><ComparisonTable /></section>}<p class="small-note">{disclaimer}</p></> : <div class="empty-state"><Icon name={category.icon} size={28} /><h2>No published offers yet.</h2><p>Offers will appear here once their terms and eligibility can be confirmed.</p><a class="button button-dark" href="/discounts/">Explore discounts <Icon name="right" size={16} /></a></div>}
   </div>
 </Layout>

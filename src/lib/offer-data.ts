@@ -17,15 +17,20 @@ export function requiredCardId(offer: Offer, records: Offer[]): string | undefin
 }
 
 export function cardFilterId(offer: Offer, records: Offer[]): string | undefined {
-  return offer.kind === 'card' ? offer.id : requiredCardId(offer, records);
+  return offer.kind === 'card' ? offer.id : bankCardRequirement(offer, records);
 }
 
-interface ResolvedRequirements { bankCardId?: string; membership?: string; university?: string; eligibility: string[]; verification: string[]; exclusions: string[]; }
+export function bankCardRequirement(offer: Offer, records: Offer[]): string | undefined {
+  return requiredCardId(offer, records) ?? (offer.requirements.bankCardNetwork ? `network:${offer.requirements.bankCardNetwork}` : undefined);
+}
+
+interface ResolvedRequirements { bankCardId?: string; bankCardNetwork?: string; membership?: string; university?: string; eligibility: string[]; verification: string[]; exclusions: string[]; }
 export function resolvedRequirements(offer: Offer, records: Offer[]): ResolvedRequirements {
   const parent = records.find(record => record.id === offer.parentId);
   const inherited = parent ? resolvedRequirements(parent, records) : undefined;
   return {
     bankCardId: requiredCardId(offer, records),
+    bankCardNetwork: offer.requirements.bankCardNetwork ?? inherited?.bankCardNetwork,
     membership: offer.requirements.membership ?? inherited?.membership,
     university: offer.requirements.university ?? inherited?.university,
     eligibility: [...new Set([...(inherited?.eligibility ?? []), ...offer.eligibility])],
@@ -35,8 +40,9 @@ export function resolvedRequirements(offer: Offer, records: Offer[]): ResolvedRe
 }
 
 export function publishedOffers(records: Offer[], today: string): Offer[] {
-  const live = records.filter(offer => offer.publication === 'published' && offer.sourceVerification.state === 'verified'
-    && offer.sourceVerification.lastChecked && (!offer.expiresAt || offer.expiresAt >= today));
+  const live = records.filter(offer => offer.publication === 'published' && offer.status !== 'Expired' && offer.status !== 'Archived'
+    && ((offer.sourceVerification.state === 'verified' && offer.sourceVerification.lastChecked) || offer.publicationBasis === 'research-snapshot')
+    && (!offer.expiresAt || offer.expiresAt >= today));
   let published = live;
   while (true) {
     const next = published.filter(offer => !offer.parentId || published.some(parent => parent.id === offer.parentId));
@@ -52,9 +58,10 @@ export function assertOfferData(records: Offer[]) {
     if (ids.has(offer.id) || paths.has(`${offer.category}/${offer.slug}`)) throw new Error(`Duplicate offer: ${offer.id}`);
     ids.add(offer.id); paths.add(`${offer.category}/${offer.slug}`);
     if (!offer.categories.length || !offer.categories.includes(offer.category)) throw new Error(`Missing primary category: ${offer.id}`);
-    if (!offer.sources.length) throw new Error(`Missing source: ${offer.id}`);
+    if (!offer.sources.length && !(offer.publicationBasis === 'research-snapshot' && offer.sourceNote)) throw new Error(`Missing source: ${offer.id}`);
     offer.sources.forEach(source => cleanSourceUrl(source.url));
-    if (offer.publication === 'published' && (offer.sourceVerification.state !== 'verified' || !offer.sourceVerification.lastChecked)) throw new Error(`Unverified publication: ${offer.id}`);
+    if (offer.publication === 'published' && offer.publicationBasis !== 'research-snapshot' && (offer.sourceVerification.state !== 'verified' || !offer.sourceVerification.lastChecked)) throw new Error(`Unverified publication: ${offer.id}`);
+    if (offer.publicationBasis === 'research-snapshot' && (!offer.researchDate || !offer.researchFile || !offer.sourceVerification.note)) throw new Error(`Missing research provenance: ${offer.id}`);
     const visited = new Set([offer.id]);
     let parentId = offer.parentId;
     while (parentId) {

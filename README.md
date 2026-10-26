@@ -24,7 +24,7 @@ npm run preview
 
 - Responsive monochrome directory, semantic navigation, native mobile menu, breadcrumbs, and a custom 404.
 - One unified directory with nine categories for local and international offers available to students studying in Armenia. Transport & Travel includes accommodation. Replaced geographic URLs have Cloudflare Pages redirects.
-- Publication is gated on official-source verification. Current published offers, unpublished research and reasons are documented in `docs/unified-directory-review.md`; the requested consolidated research file is still pending.
+- Published listings include 11 records with official-source checks and 37 explicitly labeled research snapshots from the supplied English compilation. Snapshot dates are separate from source-check dates; missing exact URLs remain visible. The import and original review are documented in `docs/unified-directory-review.md`.
 - Live search across providers, offer names, categories, benefits and eligibility. Optional bank-card selection persists across categories, includes offers requiring no specific card, supports a strict toggle, and has active-state/result counts and reset controls. Other eligibility requirements remain visible.
 - Banking comparison uses published card products only. Distinct cashback benefits reference parent cards; multi-category offers retain one record and one canonical detail page.
 - Honest empty states in categories without supplied research. No fictional jobs, scholarships, contact details, or testimonials.
@@ -61,6 +61,7 @@ src/data/                 Typed category definitions and offer records
   mobile.ts               Ucom student plans
   transportation.ts       Yerevan transport concession and fare table
   types.ts                Shared offer, source, status, and section types
+  research-import.ts      English research snapshots and import provenance
   offers.ts               Combined directory and formatting helpers
 src/components/           Reusable navigation, cards, search, filters, tables, details
 src/layouts/Layout.astro  Shared document, font, SEO, header, and footer
@@ -79,7 +80,7 @@ docs/research-audit.md    Research inventory, translation decisions, verificatio
 2. Add an `Offer` record to the relevant data module. Detail pages, cards, category counts, and sitemap routes derive from the data; presentation components do not need changes.
 3. Populate fees, currencies, eligibility, documents, restrictions, and sources using documented information only. Use explicit “Not documented” wording for missing fields. Financing must disclose missing rates, costs, repayment terms, guarantees, and subsidy conditions.
 4. Set `researchDate` only when the document supplies an exact date. `reviewedDate` is the date of site review. `verifiedDate` remains `null` until full independent verification is completed. Record partial checks and conflicts in `verificationNote`.
-5. Use `Active` only after confirming material current terms and availability. Otherwise use `Verification Required`, `Expired`, or `Archived`. Products and promotions have separate statuses; review promotion end dates whenever updating or rebuilding. Status changes are editorial, not automatic.
+5. Publication normally requires a successful source check. The English import explicitly uses `publicationBasis: research-snapshot`, requires research provenance, and displays unverified status and missing-source notes. Use `Active` only after confirming material current terms and availability. Otherwise use `Verification Required`, `Expired`, or `Archived`. Products and promotions have separate statuses; review promotion end dates whenever updating or rebuilding. Status changes are editorial, not automatic.
 6. Add only filters supported by the data through each record's `tags`. The “Free Cards” tag means both free issuance and free servicing under the documented conditions; free servicing alone does not qualify. Avoid applying current-benefit tags to archived products.
 7. Run the checks below and rebuild after each content update. Static deployments do not fetch provider data at runtime.
 
@@ -105,11 +106,11 @@ npm audit             # Published dependency advisories
 
 The browser suite starts and stops its own local production preview. Screenshots and failure traces go into ignored `test-results/`; external results go into ignored `external-link-report.json`. Reachability checks report failures for manual follow-up; HTTP success alone does not confirm an offer's terms. On restrictive hosts, Astro may need permission to initialize its local configuration directory and Playwright needs permission to launch a browser and bind a local port. `ASTRO_TELEMETRY_DISABLED=1` can disable Astro's optional telemetry.
 
-Current unified-directory validation: Astro/TypeScript checks pass with no errors or warnings; production build generates 28 HTML pages; all 588 internal links/assets/anchors pass; all 29 data/browser tests pass, including draft gates, linked benefits, multi-category identity, remembered bank-card filters, eight viewport widths, no-JavaScript rendering, content security policy and desktop/mobile WCAG AA checks. See `docs/unified-directory-review.md` for the verified publication inventory, unpublished entries and the missing research input.
+The directory includes tests for publication gates, import provenance, missing sources, ESNcard and Visa requirements, linked benefits, multi-category identity, remembered bank-card filters, eight viewport widths, no-JavaScript rendering, content security policy and desktop/mobile WCAG AA checks. See `docs/unified-directory-review.md` for the publication inventory and validation results.
 
 ## Research limitations
 
-The research is the primary content source. Banking is dated 26 October 2026; mobile has no document date; transport says 2026 without an exact date. No unconfirmed offer is marked Active. The completed Amio promotion and Ameriabank scholarship are labeled Expired, and VTB iStudent is Archived. Full independent verification is still required before claiming current availability.
+The research is the primary content source. The English compilation is dated 26 October 2026 and has not been independently rechecked. Banking is dated 26 October 2026; mobile has no document date; transport says 2026 without an exact date. No unconfirmed offer is marked Active. The completed Amio promotion and Ameriabank scholarship are labeled Expired, and VTB iStudent is Archived. Full independent verification is still required before claiming current availability.
 
 The English Amio tariff is hosted at the bank's documented PDF URL. Some other official sources are in Armenian; the StudentOffers interface and summaries remain in English. GitHub sign-in is required to submit an issue.
 

@@ -73,11 +73,19 @@ test('source cleaning strips tracking and rejects favicon and unsafe URLs', () =
 test('published categories and draft state remain consistent', () => {
   expect(categories.map(category => category.title)).toEqual(['Food & Drinks', 'Banking & Finance', 'Mobile & Internet', 'Electronics & Technology', 'Entertainment', 'Transport & Travel', 'Shopping & Retail', 'Sports & Fitness', 'Software & Digital Services']);
   for (const offer of offers) {
-    expect(offer.sourceVerification.state).toBe('verified');
-    expect(offer.sourceVerification.lastChecked).toBeTruthy();
+    if (offer.publicationBasis === 'research-snapshot') {
+      expect(offer.sourceVerification.state).toBe('unverified');
+      expect(offer.sourceVerification.lastChecked).toBeNull();
+    } else {
+      expect(offer.sourceVerification.state).toBe('verified');
+      expect(offer.sourceVerification.lastChecked).toBeTruthy();
+    }
     expect(offer.categories.every(slug => categories.some(category => category.slug === slug))).toBe(true);
     for (const source of offer.sources) expect(source.url).not.toMatch(/utm_|favicon|fbclid/);
   }
   for (const draft of drafts) { expect(draft.draftReason).toBeTruthy(); expect(offers).not.toContain(draft); }
-  expect(allOffers.some(offer => /booking/i.test(offer.name))).toBe(false);
+  const booking = allOffers.find(offer => offer.id === 'visa-booking-wallet-cashback')!;
+  expect(booking.parentId).toBeUndefined();
+  expect(booking.requirements.bankCardId).toBeUndefined();
+  expect(booking.requirements.bankCardNetwork).toBe('Visa');
 });

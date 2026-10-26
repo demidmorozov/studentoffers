@@ -4,6 +4,7 @@ import { transportationOffers } from './transportation';
 import type { Offer, ResearchOffer } from './types';
 import { assertOfferData, cleanSourceUrl, publishedOffers } from '../lib/offer-data';
 import { cardBenefits, checkedDate, draftReasons, musicResearch, verifiedUpdates } from './verified';
+import { researchOffers } from './research-import';
 
 function importResearch(raw: ResearchOffer): Offer {
   const category = raw.category === 'transportation' ? 'transport-travel' : raw.category;
@@ -78,7 +79,7 @@ const fastArca: Offer = { ...fastVisa, id: 'fast-bank-arca-classic-student', slu
   facts: [['Student offer', 'One free card'], ['Servicing', 'Free throughout card validity']],
   comparison: { issuance: 'One card free', annual: 'Free for card validity', cashback: 'Not specified', interest: 'Not specified', currencies: 'Confirm with bank', age: 'Bank approval', studentId: 'Enrollment proof required' },
 };
-export const allOffers: Offer[] = [...reviewed, fastArca, ...benefits];
+export const allOffers: Offer[] = [...reviewed, fastArca, ...benefits, ...researchOffers];
 assertOfferData(allOffers);
 export const offers = publishedOffers(allOffers, new Date().toISOString().slice(0, 10));
 export const drafts = allOffers.filter(offer => !offers.some(published => published.id === offer.id));

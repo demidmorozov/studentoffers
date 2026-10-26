@@ -3,14 +3,14 @@ import AxeBuilder from '@axe-core/playwright';
 import { offers, drafts, offersInCategory } from '../src/data/offers';
 import { categories, categoryPath } from '../src/data/categories';
 import { offerPath } from '../src/data/types';
-import { requiredCardId } from '../src/lib/offer-data';
+import { bankCardRequirement, requiredCardId } from '../src/lib/offer-data';
 import { GET as sitemap } from '../src/pages/sitemap.xml';
 import { publicRoutes } from '../src/lib/routes';
 import { readFileSync } from 'node:fs';
 
 const aeb = 'armeconombank-visa-student';
 const visibleOffers = '[data-offer]:visible';
-const cardless = offers.filter(offer => !requiredCardId(offer, offers));
+const cardless = offers.filter(offer => !bankCardRequirement(offer, offers));
 const aebBenefits = offers.filter(offer => requiredCardId(offer, offers) === aeb);
 
 // Counts come from the same published dataset used by routes and category pages.
@@ -114,8 +114,11 @@ test('published details show separate source checks, requirements and exclusions
     await expect(page.getByRole('heading', { name: 'Who is eligible?' })).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Verification requirements', exact: true })).toBeVisible();
     await expect(page.getByRole('heading', { name: 'Source verification', exact: true })).toBeVisible();
-    await expect(page.getByRole('link', { name: /Visit official provider/ })).toHaveAttribute('href', offer.sources[0].url);
-    await expect(page.getByText('A checked source does not mean every student qualifies.', { exact: false })).toBeVisible();
+    const source = offer.sources[0];
+    if (source) await expect(page.getByRole('link', { name: source.kind === 'reference' ? /View research reference/ : /Visit official provider/ })).toHaveAttribute('href', source.url);
+    else await expect(page.getByRole('link', { name: /Visit official provider|View research reference/ })).toHaveCount(0);
+    if (offer.publicationBasis === 'research-snapshot') await expect(page.getByText('Not independently checked', { exact: true })).toBeVisible();
+    else await expect(page.getByText('A checked source does not mean every student qualifies.', { exact: false })).toBeVisible();
   }
   await page.goto('/discounts/food-drinks/aeb-student-fast-food-cashback/');
   await expect(page.locator('.requirement-callout')).toContainText('Requires Armeconombank Visa Student');

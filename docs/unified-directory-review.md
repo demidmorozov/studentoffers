@@ -1,10 +1,26 @@
 # Unified directory review — 26 October 2026
 
-The consolidated input identified by the user as `research/Pasted text(1).txt` was not present in this checkout when checked. Its full import remains pending. Do not represent this review as an import of that file.
+## English compilation import
+
+The current implementation contains 37 new listings from the user-supplied English compilation identified in the data as `Studentoffers_Codex_English_Import.txt`. The original chat attachment is not stored in this checkout. Import provenance is preserved in `src/data/research-import.ts`; these records have a research date of 26 October 2026, status Verification Required, no independent verification date, and no successful source-check date.
+
+The directory now publishes 48 records: the 11 source-checked records listed below and 37 research snapshots. Sixteen matching IDs are recorded as skipped so the original, richer records and their publication decisions remain intact. General references are labeled as references. Missing exact URLs are explained without creating provider links.
+
+ESNcard partners require ESNcard membership independently of ordinary student ID. Yell Extreme Park uses one record across three categories. The two general Visa promotions require an eligible Visa card and are not linked to a particular student card; their recorded expiry is 31 December 2026. Tuition assistance appears as information on the banking page, outside the offer list and comparison table.
+
+The import expands transport, entertainment, museums, electronics, fitness, food, ESNcard partners, and software. It does not establish live availability.
+
+Current validation: Astro/TypeScript reports no errors, warnings, or hints; the production build generates 65 HTML pages; all 1,426 internal links/assets/anchors pass; all 34 data/browser tests pass. Browser tests used a temporary configuration on port 4322 because port 4321 was already occupied. Offer terms were not independently rechecked during this continuation.
+
+## Original source-check review
+
+The following describes the review before the English compilation import.
+
+The consolidated input identified by the user as `research/Pasted text(1).txt` was not present in this checkout when checked. That file was not imported during the original review; the later English compilation import is described above.
 
 Available inputs: the three original ODT documents and local `fix4.odt` (Apple Music and Spotify). Original research records remain in the structured data even when unpublished. No source-check date is inferred from import or HTTP reachability.
 
-## Published records
+## Source-checked records
 
 11 records: four bank-card products (Armeconombank Visa Student, Acba Visa Student, Fast Bank Visa Gold AknCard, Fast Bank ArCa Classic); three Ucom student plans; Spotify Premium Student; and three Armeconombank cashback benefits linked to the parent Visa Student record.
 
@@ -16,7 +32,7 @@ Official sources inspected:
 - https://www.ucom.am/en/level-up-student1 plus current prepaid/postpaid tariff pages — student data uplift, enrollment procedure, prices, renewal period, regional activation and current MTS Russia exclusion. These are paid plans, not free service.
 - https://www.spotify.com/am/student/ and Spotify student support — Armenian price, accredited-institution/SheerID restrictions, age condition, renewal and payment-country conditions. One record appears in Software and Entertainment.
 
-Each published record stores its own successful check date and sources. Eligibility and verification requirements remain distinct from source verification. The bank-card filter accepts a product selection only. A card application does not imply the applicant already holds that card; strict filtering applies to benefits requiring it. The filter’s local storage contains only product selection and strict-mode preference.
+Each source-checked record stores its own successful check date and sources. Eligibility and verification requirements remain distinct from source verification. The bank-card filter accepts a product selection only. A card application does not imply the applicant already holds that card; strict filtering applies to benefits requiring it. The filter’s local storage contains only product selection and strict-mode preference.
 
 ## Unpublished records
 
@@ -44,4 +60,4 @@ Drafts never generate detail pages, category cards, comparison rows, search reco
 
 `/discounts/` is the unified directory. `/global-discounts/` redirects to it through Cloudflare Pages `_redirects`. Transportation redirects to `/discounts/transport-travel/`; the former unverified transport-pass URL redirects to that category. Redirect targets are checked against published routes. Astro’s local preview does not apply Cloudflare redirect rules.
 
-Validation: Astro/TypeScript diagnostics have no errors or warnings; production build generates 28 HTML pages; 588 internal links/assets/anchors pass; all 29 data/browser tests pass. Coverage includes eight widths (320–1440 px), card selection persistence, strict/cardless filtering, combined search, blocked storage, no-JavaScript rendering, linked-parent updates, multi-category identity, draft exclusion and WCAG AA checks on desktop/mobile. Screenshots are saved in ignored `test-results/`.
+Original review validation: Astro/TypeScript diagnostics had no errors or warnings; the production build generated 28 HTML pages; 588 internal links/assets/anchors passed; all 29 data/browser tests passed. Coverage includes eight widths (320–1440 px), card selection persistence, strict/cardless filtering, combined search, blocked storage, no-JavaScript rendering, linked-parent updates, multi-category identity, draft exclusion and WCAG AA checks on desktop/mobile. Screenshots are saved in ignored `test-results/`.
